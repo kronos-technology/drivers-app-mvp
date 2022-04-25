@@ -34,7 +34,8 @@ type Driver @aws_api_key @aws_cognito_user_pools {
   last_name: String!
   company: Company!
   vehicle: Vehicle
-  age: Int
+  birthdate: AWSDate
+  status: String
 }
 
 input DriverInput {
@@ -44,6 +45,7 @@ input DriverInput {
   company: Company!
   vehicle: Vehicle
   birthdate: AWSDate
+  status: String
 }
 
 input UpdateDriverInput {
@@ -53,6 +55,70 @@ input UpdateDriverInput {
   company: Company
   vehicle: Vehicle
   birthdate: AWSDate
+  status: status
+}
+
+type Vehicle @aws_api_key @aws_cognito_user_pools {
+  plate: ID!
+  company: Company!
+  current_driver: Driver
+  last_driver: Driver
+  number: String!
+  last_maintenance: AWSDate
+  status: String
+}
+
+input VehicleInput {
+  plate: ID!
+  company: Company!
+  current_driver: Driver
+  last_driver: Driver
+  number: String!
+  last_maintenance: AWSDate
+  status: String
+}
+
+input UpdateVehicleInput {
+  plate: ID!
+  company: Company
+  current_driver: Driver
+  last_driver: Driver
+  number: String
+  last_maintenance: AWSDate
+  status: String
+}
+
+type Company @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  phone: AWSPhone!
+  name: String!
+  city: String!
+  address: String!
+  nit: String!
+  vehicles: [Vehicle]
+  drivers: [Driver]
+}
+
+input CompanyInput {
+  id: ID!
+  phone: AWSPhone!
+  name: String!
+  city: String!
+  address: String!
+  nit: String!
+  vehicles: [Vehicle]
+  drivers: [Driver]
+}
+
+input UpdateCompanyInput {
+  id: ID!
+  phone: AWSPhone
+  name: String
+  city: String
+  address: String
+  nit: String
+  vehicles: [Vehicle]
+  drivers: [Driver]
 }
 
 type Query {

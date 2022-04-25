@@ -28,18 +28,56 @@ input UpdateProductInput {
   inventory: Int
 }
 
+type Driver @aws_api_key @aws_cognito_user_pools {
+  id: ID!
+  name: String!
+  last_name: String!
+  company: Company!
+  vehicle: Vehicle
+  age: Int
+}
+
+input DriverInput {
+  id: ID!
+  name: String!
+  last_name: String!
+  company: Company!
+  vehicle: Vehicle
+  birthdate: AWSDate
+}
+
+input UpdateDriverInput {
+  id: ID!
+  name: String
+  last_name: String
+  company: Company
+  vehicle: Vehicle
+  birthdate: AWSDate
+}
+
 type Query {
   getProductById(productId: ID!): Product @aws_api_key @aws_cognito_user_pools
   listProducts: [Product] @aws_api_key @aws_cognito_user_pools
   productsByCategory(category: String!): [Product]
     @aws_api_key
     @aws_cognito_user_pools
+  getDriverById(productId: ID!): Driver @aws_api_key @aws_cognito_user_pools
+  listDriversByCompany(companyId: ID!): [Driver]
+    @aws_api_key
+    @aws_cognito_user_pools
+  listDrivers: [Driver] @aws_api_key @aws_cognito_user_pools
 }
 
 type Mutation {
   createProduct(product: ProductInput!): Product
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteProduct(productId: ID!): ID
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  updateProduct(product: UpdateProductInput!): Product
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  createDriver(driver: DriverInput!): Driver
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  deleteProduct(driverId: ID!): ID
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   updateProduct(product: UpdateProductInput!): Product
     @aws_cognito_user_pools(cognito_groups: ["Admin"])

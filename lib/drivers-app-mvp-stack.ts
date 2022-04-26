@@ -10,7 +10,7 @@ export class DriversAppMvpStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const userPool = new cognito.UserPool(this, 'user-pool', {
+    const userPool = new cognito.UserPool(this, 'UserPool', {
       selfSignUpEnabled: true,
       accountRecovery: cognito.AccountRecovery.PHONE_AND_EMAIL,
       userVerification: {
@@ -31,8 +31,8 @@ export class DriversAppMvpStack extends cdk.Stack {
       userPool
     })
 
-    const api = new appsync.GraphqlApi(this, 'kronos-api', {
-      name: "kronos-api",
+    const api = new appsync.GraphqlApi(this, 'Api', {
+      name: "api",
       logConfig: {
         fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
@@ -54,7 +54,7 @@ export class DriversAppMvpStack extends cdk.Stack {
     })
 
     // Create the function
-    const appsyncHandlerLambda = new lambda.Function(this, 'AppSyncHandler', {
+    const appsyncHandlerLambda = new lambda.Function(this, 'ApiLambdaResolver', {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'main.handler',
       code: lambda.Code.fromAsset('lambda-fns'),
@@ -94,19 +94,33 @@ export class DriversAppMvpStack extends cdk.Stack {
       fieldName: "updateProduct"
     })
 
-    const dbTable = new ddb.Table(this, 'CDKProductTable', {
+    const dbTable = new ddb.Table(this, 'DbTable', {
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-      partitionKey: {
-        name: 'id',
-        type: ddb.AttributeType.STRING,
-      },
+      partitionKey: { name: 'pk', type: ddb.AttributeType.STRING},
+      sortKey: {name: 'sk', type: ddb.AttributeType.STRING},
     })
 
     // Add a global secondary index to enable another data access pattern
     dbTable.addGlobalSecondaryIndex({
-      indexName: "productsByCategory",
+      indexName: "gs1",
       partitionKey: {
-        name: "category",
+        name: "gs1pk",
+        type: ddb.AttributeType.STRING,
+      },
+      sortKey: {
+        name: "gs1sk",
+        type: ddb.AttributeType.STRING,
+      }
+    })
+
+    dbTable.addGlobalSecondaryIndex({
+      indexName: "gs2",
+      partitionKey: {
+        name: "gs2pk",
+        type: ddb.AttributeType.STRING,
+      },
+      sortKey: {
+        name: "gs2sk",
         type: ddb.AttributeType.STRING,
       }
     })

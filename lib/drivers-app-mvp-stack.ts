@@ -31,8 +31,8 @@ export class DriversAppMvpStack extends cdk.Stack {
       userPool
     })
 
-    const api = new appsync.GraphqlApi(this, 'drivers', {
-      name: "cdk-product-api",
+    const api = new appsync.GraphqlApi(this, 'kronos-api', {
+      name: "kronos-api",
       logConfig: {
         fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
@@ -54,7 +54,7 @@ export class DriversAppMvpStack extends cdk.Stack {
     })
 
     // Create the function
-    const productLambda = new lambda.Function(this, 'AppSyncProductHandler', {
+    const appsyncHandlerLambda = new lambda.Function(this, 'AppSyncHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       handler: 'main.handler',
       code: lambda.Code.fromAsset('lambda-fns'),
@@ -62,7 +62,7 @@ export class DriversAppMvpStack extends cdk.Stack {
     })
 
     // Set the new Lambda function as a data source for the AppSync API
-    const lambdaDs = api.addLambdaDataSource('lambdaDatasource', productLambda)
+    const lambdaDs = api.addLambdaDataSource('lambdaDatasource', appsyncHandlerLambda)
 
     lambdaDs.createResolver({
       typeName: "Query",
@@ -94,7 +94,7 @@ export class DriversAppMvpStack extends cdk.Stack {
       fieldName: "updateProduct"
     })
 
-    const productTable = new ddb.Table(this, 'CDKProductTable', {
+    const dbTable = new ddb.Table(this, 'CDKProductTable', {
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
       partitionKey: {
         name: 'id',
@@ -103,7 +103,7 @@ export class DriversAppMvpStack extends cdk.Stack {
     })
 
     // Add a global secondary index to enable another data access pattern
-    productTable.addGlobalSecondaryIndex({
+    dbTable.addGlobalSecondaryIndex({
       indexName: "productsByCategory",
       partitionKey: {
         name: "category",
@@ -112,10 +112,10 @@ export class DriversAppMvpStack extends cdk.Stack {
     })
 
     // Enable the Lambda function to access the DynamoDB table (using IAM)
-    productTable.grantFullAccess(productLambda)
+    dbTable.grantFullAccess(appsyncHandlerLambda)
 
     // Create an environment variable that we will use in the function code
-    productLambda.addEnvironment('PRODUCT_TABLE', productTable.tableName)
+    appsyncHandlerLambda.addEnvironment('DB_TABLE', dbTable.tableName)
 
     new cdk.CfnOutput(this, "GraphQLAPIURL", {
       value: api.graphqlUrl

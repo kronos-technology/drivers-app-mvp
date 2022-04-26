@@ -32,8 +32,8 @@ type Driver @aws_api_key @aws_cognito_user_pools {
   id: ID!
   name: String!
   last_name: String!
-  company: Company!
-  vehicle: Vehicle
+  company: String
+  vehicle: String
   birthdate: AWSDate
   status: String
 }
@@ -42,8 +42,8 @@ input DriverInput {
   id: ID!
   name: String!
   last_name: String!
-  company: Company!
-  vehicle: Vehicle
+  company: String!
+  vehicle: String
   birthdate: AWSDate
   status: String
 }
@@ -52,17 +52,16 @@ input UpdateDriverInput {
   id: ID!
   name: String
   last_name: String
-  company: Company
-  vehicle: Vehicle
+  company: String
+  vehicle: String
   birthdate: AWSDate
   status: String
 }
 
 type Vehicle @aws_api_key @aws_cognito_user_pools {
   plate: ID!
-  company: Company!
-  current_driver: Driver
-  last_driver: Driver
+  current_driver: String
+  last_driver: String
   number: String!
   last_maintenance: AWSDate
   status: String
@@ -70,9 +69,9 @@ type Vehicle @aws_api_key @aws_cognito_user_pools {
 
 input VehicleInput {
   plate: ID!
-  company: Company!
-  current_driver: Driver
-  last_driver: Driver
+  company: String!
+  current_driver: String
+  last_driver: String
   number: String!
   last_maintenance: AWSDate
   status: String
@@ -80,9 +79,9 @@ input VehicleInput {
 
 input UpdateVehicleInput {
   plate: ID!
-  company: Company
-  current_driver: Driver
-  last_driver: Driver
+  company: String
+  current_driver: String
+  last_driver: String
   number: String
   last_maintenance: AWSDate
   status: String
@@ -95,8 +94,8 @@ type Company @aws_api_key @aws_cognito_user_pools {
   city: String!
   address: String!
   nit: String!
-  vehicles: [Vehicle]
-  drivers: [Driver]
+  vehicles: [String]
+  drivers: [String]
 }
 
 input CompanyInput {
@@ -106,8 +105,8 @@ input CompanyInput {
   city: String!
   address: String!
   nit: String!
-  vehicles: [Vehicle]
-  drivers: [Driver]
+  vehicles: [String]
+  drivers: [String]
 }
 
 input UpdateCompanyInput {
@@ -117,8 +116,8 @@ input UpdateCompanyInput {
   city: String
   address: String
   nit: String
-  vehicles: [Vehicle]
-  drivers: [Driver]
+  vehicles: [String]
+  drivers: [String]
 }
 
 type Route @aws_api_key @aws_cognito_user_pools {
@@ -126,7 +125,6 @@ type Route @aws_api_key @aws_cognito_user_pools {
   origin: String!
   destination: String!
   geojson: String!
-  companies: [Company]
 }
 
 input RouteInput {
@@ -134,7 +132,6 @@ input RouteInput {
   origin: String!
   destination: String!
   geojson: String!
-  companies: [Company]
 }
 
 input UpdateRouteInput {
@@ -142,7 +139,6 @@ input UpdateRouteInput {
   origin: String
   destination: String
   geojson: String
-  companies: [Company]
 }
 
 type Query {

@@ -129,7 +129,7 @@ type Route @aws_api_key @aws_cognito_user_pools {
   companies: [Company]
 }
 
-input CompanyInput {
+input RouteInput {
   id: ID!
   origin: String!
   destination: String!
@@ -137,7 +137,7 @@ input CompanyInput {
   companies: [Company]
 }
 
-input UpdateCompanyInput {
+input UpdateRouteInput {
   id: ID!
   origin: String
   destination: String

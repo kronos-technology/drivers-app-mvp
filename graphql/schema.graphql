@@ -29,7 +29,7 @@ input UpdateProductInput {
 }
 
 type Driver @aws_api_key @aws_cognito_user_pools {
-  id: ID!
+  driver_id: ID!
   name: String!
   last_name: String!
   company: String
@@ -39,7 +39,7 @@ type Driver @aws_api_key @aws_cognito_user_pools {
 }
 
 input DriverInput {
-  id: ID!
+  driver_id: ID!
   name: String!
   last_name: String!
   company: String!
@@ -49,7 +49,7 @@ input DriverInput {
 }
 
 input UpdateDriverInput {
-  id: ID!
+  driver_id: ID!
   name: String
   last_name: String
   company: String
@@ -88,7 +88,7 @@ input UpdateVehicleInput {
 }
 
 type Company @aws_api_key @aws_cognito_user_pools {
-  id: ID!
+  company_id: ID!
   phone: AWSPhone!
   name: String!
   city: String!
@@ -99,7 +99,7 @@ type Company @aws_api_key @aws_cognito_user_pools {
 }
 
 input CompanyInput {
-  id: ID!
+  company_id: ID!
   phone: AWSPhone!
   name: String!
   city: String!
@@ -110,7 +110,7 @@ input CompanyInput {
 }
 
 input UpdateCompanyInput {
-  id: ID!
+  company_id: ID!
   phone: AWSPhone
   name: String
   city: String
@@ -121,21 +121,21 @@ input UpdateCompanyInput {
 }
 
 type Route @aws_api_key @aws_cognito_user_pools {
-  id: ID!
+  route_id: ID!
   origin: String!
   destination: String!
   geojson: String!
 }
 
 input RouteInput {
-  id: ID!
+  route_id: ID!
   origin: String!
   destination: String!
   geojson: String!
 }
 
 input UpdateRouteInput {
-  id: ID!
+  route_id: ID!
   origin: String
   destination: String
   geojson: String

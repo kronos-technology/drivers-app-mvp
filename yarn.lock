@@ -549,7 +549,7 @@
     "@aws-sdk/types" "3.78.0"
     tslib "^2.3.1"
 
-"@aws-sdk/client-dynamodb@^3.72.0":
+"@aws-sdk/client-dynamodb@^3.72.0", "@aws-sdk/client-dynamodb@^3.78.0":
   version "3.78.0"
   resolved "https://registry.yarnpkg.com/@aws-sdk/client-dynamodb/-/client-dynamodb-3.78.0.tgz#9df45d9d3e6867d523cfff2e4ba3e74b8d557e4b"
   integrity sha512-5Kuw2sya0hTwaRvNXKmBkqRdM0wCpwW40vrEVDIcyxMH4OPFQ4V1TGdE11x/DLntMj6QaNZZVWO6MWBZCWzmaw==

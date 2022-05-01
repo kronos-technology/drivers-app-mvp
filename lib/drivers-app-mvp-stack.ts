@@ -1,9 +1,9 @@
 // lib/cdk-products-stack.ts
-import * as cdk from '@aws-cdk/core'
-import * as cognito from '@aws-cdk/aws-cognito'
-import * as appsync from '@aws-cdk/aws-appsync'
-import * as ddb from '@aws-cdk/aws-dynamodb'
-import * as lambda from '@aws-cdk/aws-lambda'
+import * as cdk from '@aws-cdk/core';
+import * as cognito from '@aws-cdk/aws-cognito';
+import * as appsync from '@aws-cdk/aws-appsync';
+import * as ddb from '@aws-cdk/aws-dynamodb';
+import * as lambda from '@aws-cdk/aws-lambda';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends cdk.Stack {
@@ -25,16 +25,16 @@ export class DriversAppMvpStack extends cdk.Stack {
           mutable: true
         }
       }
-    })
+    });
 
-    const userPoolClient = new cognito.UserPoolClient(this, "UserPoolClient", {
+    const userPoolClient = new cognito.UserPoolClient(this, 'UserPoolClient', {
       userPool
-    })
+    });
 
     const api = new appsync.GraphqlApi(this, 'Api', {
-      name: "api",
+      name: 'api',
       logConfig: {
-        fieldLogLevel: appsync.FieldLogLevel.ALL,
+        fieldLogLevel: appsync.FieldLogLevel.ALL
       },
       schema: appsync.Schema.fromAsset('./graphql/schema.graphql'),
       authorizationConfig: {
@@ -44,123 +44,126 @@ export class DriversAppMvpStack extends cdk.Stack {
             expires: cdk.Expiration.after(cdk.Duration.days(365))
           }
         },
-        additionalAuthorizationModes: [{
-          authorizationType: appsync.AuthorizationType.USER_POOL,
-          userPoolConfig: {
-            userPool,
+        additionalAuthorizationModes: [
+          {
+            authorizationType: appsync.AuthorizationType.USER_POOL,
+            userPoolConfig: {
+              userPool
+            }
           }
-        }]
-      },
-    })
+        ]
+      }
+    });
 
     // Create the function
-    const appsyncHandlerLambda = new lambda.Function(this, 'ApiLambdaResolver', {
-      runtime: lambda.Runtime.NODEJS_14_X,
-      handler: 'main.handler',
-      code: lambda.Code.fromAsset('lambda-fns'),
-      memorySize: 1024
-    })
+    const appsyncHandlerLambda = new lambda.Function(
+      this,
+      'ApiLambdaResolver',
+      {
+        runtime: lambda.Runtime.NODEJS_14_X,
+        handler: 'main.handler',
+        code: lambda.Code.fromAsset('lambda-fns'),
+        memorySize: 1024
+      }
+    );
 
     // Set the new Lambda function as a data source for the AppSync API
-    const lambdaDs = api.addLambdaDataSource('lambdaDatasource', appsyncHandlerLambda)
+    const lambdaDs = api.addLambdaDataSource(
+      'lambdaDatasource',
+      appsyncHandlerLambda
+    );
 
     lambdaDs.createResolver({
-      typeName: "Query",
-      fieldName: "getProductById"
-    })
+      typeName: 'Query',
+      fieldName: 'listProducts'
+    });
 
     lambdaDs.createResolver({
-      typeName: "Query",
-      fieldName: "listProducts"
-    })
+      typeName: 'Query',
+      fieldName: 'productsByCategory'
+    });
 
     lambdaDs.createResolver({
-      typeName: "Query",
-      fieldName: "productsByCategory"
-    })
+      typeName: 'Mutation',
+      fieldName: 'createProduct'
+    });
 
     lambdaDs.createResolver({
-      typeName: "Mutation",
-      fieldName: "createProduct"
-    })
+      typeName: 'Mutation',
+      fieldName: 'deleteProduct'
+    });
 
     lambdaDs.createResolver({
-      typeName: "Mutation",
-      fieldName: "deleteProduct"
-    })
-
-    lambdaDs.createResolver({
-      typeName: "Mutation",
-      fieldName: "updateProduct"
-    })
+      typeName: 'Mutation',
+      fieldName: 'updateProduct'
+    });
 
     const dbTable = new ddb.Table(this, 'DbTable', {
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-      partitionKey: { name: 'pk', type: ddb.AttributeType.STRING},
-      sortKey: {name: 'sk', type: ddb.AttributeType.STRING},
-    })
+      partitionKey: { name: 'pk', type: ddb.AttributeType.STRING },
+      sortKey: { name: 'sk', type: ddb.AttributeType.STRING }
+    });
 
     // Add a global secondary index to enable another data access pattern
     dbTable.addGlobalSecondaryIndex({
-      indexName: "gs1",
+      indexName: 'gs1',
       partitionKey: {
-        name: "gs1pk",
-        type: ddb.AttributeType.STRING,
+        name: 'gs1pk',
+        type: ddb.AttributeType.STRING
       },
       sortKey: {
-        name: "gs1sk",
-        type: ddb.AttributeType.STRING,
+        name: 'gs1sk',
+        type: ddb.AttributeType.STRING
       }
-    })
+    });
 
     dbTable.addGlobalSecondaryIndex({
-      indexName: "gs2",
+      indexName: 'gs2',
       partitionKey: {
-        name: "gs2pk",
-        type: ddb.AttributeType.STRING,
+        name: 'gs2pk',
+        type: ddb.AttributeType.STRING
       },
       sortKey: {
-        name: "gs2sk",
-        type: ddb.AttributeType.STRING,
+        name: 'gs2sk',
+        type: ddb.AttributeType.STRING
       }
-    })
+    });
 
     dbTable.addGlobalSecondaryIndex({
-      indexName: "gs3",
+      indexName: 'gs3',
       partitionKey: {
-        name: "_type",
-        type: ddb.AttributeType.STRING,
+        name: '_type',
+        type: ddb.AttributeType.STRING
       },
       sortKey: {
-        name: "gs3sk",
-        type: ddb.AttributeType.STRING,
+        name: 'gs3sk',
+        type: ddb.AttributeType.STRING
       }
-    })
+    });
     // Enable the Lambda function to access the DynamoDB table (using IAM)
-    dbTable.grantFullAccess(appsyncHandlerLambda)
+    dbTable.grantFullAccess(appsyncHandlerLambda);
 
     // Create an environment variable that we will use in the function code
-    appsyncHandlerLambda.addEnvironment('DB_TABLE', dbTable.tableName)
+    appsyncHandlerLambda.addEnvironment('DB_TABLE', dbTable.tableName);
 
-    new cdk.CfnOutput(this, "GraphQLAPIURL", {
+    new cdk.CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl
-    })
+    });
 
     new cdk.CfnOutput(this, 'AppSyncAPIKey', {
       value: api.apiKey || ''
-    })
+    });
 
     new cdk.CfnOutput(this, 'ProjectRegion', {
       value: this.region
-    })
+    });
 
-    new cdk.CfnOutput(this, "UserPoolId", {
+    new cdk.CfnOutput(this, 'UserPoolId', {
       value: userPool.userPoolId
-    })
+    });
 
-    new cdk.CfnOutput(this, "UserPoolClientId", {
+    new cdk.CfnOutput(this, 'UserPoolClientId', {
       value: userPoolClient.userPoolClientId
-    })
+    });
   }
-
-  }
+}

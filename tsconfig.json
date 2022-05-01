@@ -5,9 +5,19 @@
     "lib": [
       "es2018"
     ],
+    "allowJs": true,
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "types": ["node", "jest"],
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
     "declaration": true,
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "strictNullChecks": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
@@ -24,6 +34,7 @@
     ]
   },
   "exclude": [
+    "dist",
     "node_modules",
     "cdk.out"
   ]

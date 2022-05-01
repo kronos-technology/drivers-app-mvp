@@ -1,9 +1,9 @@
-type Coordinates  = {
-    plate: string,
-    timestamp: string,
-    longitude: number,
-    latitude: number,
-    geohash: string,
-}
+type Coordinates = {
+  plate: string;
+  timestamp: string;
+  longitude: number;
+  latitude: number;
+  geohash: string;
+};
 
-export default Coordinates
+export default Coordinates;

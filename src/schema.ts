@@ -20,20 +20,9 @@ const Schema = {
     gs2: { hash: 'gs2pk', sort: 'gs2sk' }
   },
   models: {
-    User: {
-      pk: { type: String, value: 'user#${id}' },
-      sk: { type: String, value: 'user#${id}' },
-      id: { type: String, generate: 'ulid' },
-      name: { type: String, required: true },
-      status: { type: String, default: 'active' },
-      zip: { type: String },
-
-      gs1pk: { type: String, value: 'sec#${name}' },
-      gs1sk: { type: String, value: 'sec#${id}' }
-    },
     Driver: {
-      pk: { type: String, value: 'driver#${driver_id}' },
-      sk: { type: String, value: 'driver#${driver_id}' },
+      pk: { type: String, value: 'driver#${driverId}' },
+      sk: { type: String, value: 'driver#${driverId}' },
       driverId: { type: String, required: true },
       name: { type: String, required: true },
       lastName: { type: String, required: true },
@@ -60,8 +49,8 @@ const Schema = {
       geohash: { type: String, required: true }
     },
     Company: {
-      pk: { type: String, value: 'company#${company_id}' },
-      sk: { type: String, value: 'company#${company_id}' },
+      pk: { type: String, value: 'company#${companyId}' },
+      sk: { type: String, value: 'company#${companyId}' },
       companyId: { type: String, required: true },
       phone: { type: String, required: true },
       address: { type: String, required: true }

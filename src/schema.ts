@@ -56,15 +56,15 @@ const Schema = {
       address: { type: String, required: true }
     },
     Route: {
-      pk: { type: String, value: 'route#${route_id}' },
-      sk: { type: String, value: 'route#${route_id}' },
+      pk: { type: String, value: 'route#${routeId}' },
+      sk: { type: String, value: 'route#${routeId}' },
       routeId: { type: String, required: true },
       origin: { type: String, required: true },
       destination: { type: String, required: true },
       geojson: { type: String, required: true }
     },
     RouteSnapshot: {
-      pk: { type: String, value: 'route#${route_id}' },
+      pk: { type: String, value: 'route#${routeId}' },
       sk: { type: String, value: 'snapshot#${timestamp}' },
       routeId: { type: String, required: true },
       timestamp: { type: Date, required: true },

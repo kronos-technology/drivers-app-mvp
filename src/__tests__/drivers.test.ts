@@ -7,7 +7,7 @@ describe('Drivers Module', () => {
   const response = listDrivers();
   console.log(response);
   test('List all drivers', () => {
-    expect(listDrivers).toContain('statusCode');
+    expect(listDrivers()).toContain('statusCode');
   });
 });
 

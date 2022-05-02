@@ -129,17 +129,6 @@ export class DriversAppMvpStack extends cdk.Stack {
       }
     });
 
-    dbTable.addGlobalSecondaryIndex({
-      indexName: 'gs3',
-      partitionKey: {
-        name: '_type',
-        type: ddb.AttributeType.STRING
-      },
-      sortKey: {
-        name: 'gs3sk',
-        type: ddb.AttributeType.STRING
-      }
-    });
     // Enable the Lambda function to access the DynamoDB table (using IAM)
     dbTable.grantFullAccess(appsyncHandlerLambda);
 

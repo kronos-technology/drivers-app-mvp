@@ -55,10 +55,9 @@ async function listDrivers() {
   console.log('Listing drivers in database');
   try {
     //const driversList = await Driver.find({});
-
     const driversList = await Driver.find({}, { index: 'gs1' });
 
-    console.log(driversList);
+    console.log('list of drivers', driversList);
     return driversList;
   } catch (error) {
     console.log('DynamoDB error: ', error);

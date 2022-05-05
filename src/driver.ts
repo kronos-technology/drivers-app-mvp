@@ -80,5 +80,6 @@ async function listDriversByCompany(id) {
   }
 }
 
+async function updateDriver(data: Driver) {}
 export { listDrivers, listDriversByCompany, getDriverById, createDriver };
 export default Driver;

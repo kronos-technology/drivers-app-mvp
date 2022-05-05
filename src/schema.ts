@@ -103,11 +103,11 @@ const Schema = {
       gs1sk: { type: String, value: 'route#${routeId}#${id}' },
       gs2pk: { type: String, value: 'checkin#' },
       gs2sk: { type: String, value: 'route#${plate}#${id}' }
-    },
-    params: {
-      isoDates: true,
-      timestamps: true
     }
+  },
+  params: {
+    isoDates: true,
+    timestamps: true
   }
 };
 

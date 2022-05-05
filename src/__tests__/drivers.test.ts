@@ -32,8 +32,8 @@ describe('Drivers Module', () => {
         birthdate: '1991-01-28'
       }
     ];
-    const response = await createDriver(data);
-    expect(response).toBeInstanceOf(Object);
+    const response = await createDriver(data[0]);
+    expect(response).toBeDefined();
   });
 });
 

@@ -34,6 +34,7 @@ test('Create driver', async () => {
     const response = await driverLib.create(item);
     expect(response).toBeDefined();
   }
+  await new Promise((r) => setTimeout(r, 2000));
 });
 
 test('List all drivers', async () => {

@@ -39,11 +39,11 @@ const Schema = {
       sk: { type: String, value: 'vehicle#${plate}' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       plate: { type: String, required: true },
-      status: { type: String, default: 'IDLE' },
+      status: { type: String, default: 'idle' },
       number: { type: String, required: true },
       companyId: { type: String, required: true },
       lastMaintenance: { type: Date, required: false },
-      currentDriverId: { type: String, default: 'NO_DRIVER' },
+      currentDriverId: { type: String, default: 'no_driver' },
       // To search by company or type
       gs1pk: { type: String, value: 'vehicle#' },
       gs1sk: { type: String, value: 'vehicle#${companyId}#${id}' }

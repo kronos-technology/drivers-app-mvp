@@ -5,8 +5,8 @@ export type Vehicle = {
   status: String;
   number: String;
   companyId: String;
-  lastMaintenance: String;
-  currentVehicleId: String;
+  lastMaintenance?: String;
+  currentDriverId?: String;
 };
 export type VehicleUpdate = {
   plate: String;
@@ -14,7 +14,7 @@ export type VehicleUpdate = {
   number?: String;
   companyId?: String;
   lastMaintenance?: String;
-  currentVehicleId?: String;
+  currentDriverId?: String;
 };
 
 const VehicleModel = table.getModel('Vehicle');
@@ -35,7 +35,7 @@ async function create(vehicleInfo: Vehicle) {
 async function getById(id: String) {
   console.log('Retreving vehicle with id: ', id);
   try {
-    const vehicleInfo = await VehicleModel.get({ vehicleId: id });
+    const vehicleInfo = await VehicleModel.get({ plate: id });
     console.log(vehicleInfo);
     return vehicleInfo;
   } catch (error) {
@@ -83,7 +83,7 @@ async function update(data: VehicleUpdate) {
 async function remove(id: String) {
   console.log('Deleting vehicle ', id);
   try {
-    const removed = await VehicleModel.remove({ vehicleId: id });
+    const removed = await VehicleModel.remove({ plate: id });
     return removed;
   } catch (error) {
     console.log('DynamoDB error: ', error);

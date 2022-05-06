@@ -23,6 +23,7 @@ const Schema = {
     Driver: {
       pk: { type: String, value: 'driver#${driverId}' },
       sk: { type: String, value: 'driver#${driverId}' },
+      id: { type: String, generate: 'ulid', validate: Match.ulid },
       driverId: { type: String, required: true },
       name: { type: String, required: true },
       lastName: { type: String, required: true },
@@ -31,7 +32,7 @@ const Schema = {
       phone: { type: String, required: true, validate: Match.phone },
       // To search by company or type
       gs1pk: { type: String, value: 'driver#' },
-      gs1sk: { type: String, value: 'driver#${companyId}' }
+      gs1sk: { type: String, value: 'driver#${companyId}#${id}' }
     },
     Vehicle: {
       pk: { type: String, value: 'vehicle#${plate}' },
@@ -40,12 +41,12 @@ const Schema = {
       plate: { type: String, required: true },
       status: { type: String, default: 'IDLE' },
       number: { type: String, required: true },
-      company: { type: String, required: true },
+      companyId: { type: String, required: true },
       lastMaintenance: { type: Date, required: false },
-      currentDriver: { type: String, default: 'NO_DRIVER' },
+      currentDriverId: { type: String, default: 'NO_DRIVER' },
       // To search by company or type
       gs1pk: { type: String, value: 'vehicle#' },
-      gs1sk: { type: String, value: 'vehicle#${company}#${id}' }
+      gs1sk: { type: String, value: 'vehicle#${companyId}#${id}' }
     },
     Company: {
       pk: { type: String, value: 'company#${companyId}' },

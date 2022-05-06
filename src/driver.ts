@@ -1,7 +1,4 @@
-import { DynamoDBClient, ListBackupsCommand } from '@aws-sdk/client-dynamodb';
-import { OneTableError, OneTableArgError, Table } from 'dynamodb-onetable';
-import Dynamo from 'dynamodb-onetable/Dynamo';
-import Schema from './schema';
+import table from './util';
 
 export type Driver = {
   driverId: String;
@@ -19,20 +16,7 @@ export type DriverUpdate = {
   birthdate?: String;
   phone?: String;
 };
-const client = new Dynamo({
-  client: new DynamoDBClient({})
-});
-/*
-    Single-table schema and setup. This is used for general access and by `createTable`
- */
-const tableName = 'DriversAppMvpStack-DbTableED196C5F-2JLYN2IVIIPA';
-//const tableName = process.env.DB_TABLE;
-const table = new Table({
-  name: tableName,
-  client: client,
-  logger: true,
-  schema: Schema
-});
+
 const Driver = table.getModel('Driver');
 
 async function create(driverInfo: Driver) {

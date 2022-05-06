@@ -3,15 +3,22 @@ import { OneTableError, OneTableArgError, Table } from 'dynamodb-onetable';
 import Dynamo from 'dynamodb-onetable/Dynamo';
 import Schema from './schema';
 
-type Driver = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  inventory: number;
+export type Driver = {
+  driverId: String;
+  name: String;
+  lastName: String;
+  companyId: String;
+  birthdate: String;
+  phone: String;
 };
-
+export type DriverUpdate = {
+  driverId: String;
+  name?: String;
+  lastName?: String;
+  companyId?: String;
+  birthdate?: String;
+  phone?: String;
+};
 const client = new Dynamo({
   client: new DynamoDBClient({})
 });
@@ -28,10 +35,10 @@ const table = new Table({
 });
 const Driver = table.getModel('Driver');
 
-async function createDriver(driver_data) {
+async function create(driverInfo: Driver) {
   console.log('Creating new driver in database');
   try {
-    const newDriver = await Driver.create(driver_data);
+    const newDriver = await Driver.create(driverInfo, { exists: false });
     return newDriver;
   } catch (err) {
     console.log('DynamoDB error: ', err);
@@ -39,10 +46,10 @@ async function createDriver(driver_data) {
   }
 }
 
-async function getDriverById(id) {
+async function getById(id: String) {
   console.log('Retreving driver with id: ', id);
   try {
-    const driverInfo = await Driver.get({ driver_id: id });
+    const driverInfo = await Driver.get({ driverId: id });
     console.log(driverInfo);
     return driverInfo;
   } catch (error) {
@@ -51,13 +58,10 @@ async function getDriverById(id) {
   }
 }
 
-async function listDrivers() {
+async function list() {
   console.log('Listing drivers in database');
   try {
-    //const driversList = await Driver.find({});
     const driversList = await Driver.find({}, { index: 'gs1' });
-
-    console.log('list of drivers', driversList);
     return driversList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
@@ -65,14 +69,10 @@ async function listDrivers() {
   }
 }
 
-async function listDriversByCompany(id) {
-  console.log('Listing drivers for company', id);
+async function listByCompany(id: String) {
+  console.log('Listing drivers for company ', id);
   try {
-    //const driversList = await Driver.find({});
-
-    const driversList = await Driver.find({ company_id: id }, { index: 'gs1' });
-
-    console.log(driversList);
+    const driversList = await Driver.find({ companyId: id }, { index: 'gs1' });
     return driversList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
@@ -80,6 +80,25 @@ async function listDriversByCompany(id) {
   }
 }
 
-async function updateDriver(data: Driver) {}
-export { listDrivers, listDriversByCompany, getDriverById, createDriver };
-export default Driver;
+async function update(data: DriverUpdate) {
+  console.log('Updating driver ', data.driverId);
+  try {
+    const driver = await Driver.update(data);
+    return driver;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+
+async function remove(id: String) {
+  console.log('Deleting driver ', id);
+  try {
+    const removed = await Driver.remove({ driverId: id });
+    return removed;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+export { list, listByCompany, getById, create, update, remove };

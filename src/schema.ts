@@ -32,7 +32,7 @@ const Schema = {
       phone: { type: String, required: true, validate: Match.phone },
       // To search by company or type
       gs1pk: { type: String, value: 'driver#' },
-      gs1sk: { type: String, value: 'driver#${companyId}#${id}' }
+      gs1sk: { type: String, value: 'driver#${companyId}' }
     },
     Vehicle: {
       pk: { type: String, value: 'vehicle#${plate}' },
@@ -46,7 +46,7 @@ const Schema = {
       currentDriverId: { type: String, default: 'no_driver' },
       // To search by company or type
       gs1pk: { type: String, value: 'vehicle#' },
-      gs1sk: { type: String, value: 'vehicle#${companyId}#${id}' }
+      gs1sk: { type: String, value: 'vehicle#${companyId}' }
     },
     Company: {
       pk: { type: String, value: 'company#${companyId}' },
@@ -55,11 +55,11 @@ const Schema = {
       companyId: { type: String, required: true },
       phone: { type: String, required: true, validate: Match.phone },
       address: { type: String, required: true, validate: Match.address },
-      email: { type: String, required: true, validate: Match.email },
+      email: { type: String, validate: Match.email },
       city: { type: String, required: true },
       // To search by city or type
       gs1pk: { type: String, value: 'company#' },
-      gs1sk: { type: String, value: 'company#${city}#${id}' }
+      gs1sk: { type: String, value: 'company#${city}' }
     },
     Route: {
       pk: { type: String, value: 'route#${routeId}' },
@@ -69,26 +69,23 @@ const Schema = {
       origin: { type: String, required: true },
       destination: { type: String, required: true },
       geojson: { type: String, required: true },
-      checkpoints: { type: Array, default: [] },
       // To search by origin, destination or type
       gs1pk: { type: String, value: 'route#' },
-      gs1sk: { type: String, value: 'origin#${origin}#${id}' },
+      gs1sk: { type: String, value: 'origin#${origin}' },
       gs2pk: { type: String, value: 'route#' },
-      gs2sk: { type: String, value: 'destination#${destination}#${id}' }
+      gs2sk: { type: String, value: 'destination#${destination}' }
     },
     Checkpoint: {
-      pk: { type: String, value: 'checkpoint#${checkpointId}' },
+      pk: { type: String, value: 'route#${routeId}' },
       sk: { type: String, value: 'checkpoint#${checkpointId}' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       checkpointId: { type: String, required: true },
-      routes: { type: Array, default: [] },
-      checkinHistory: { type: Array },
-      latitude: { type: Number, required: true },
-      longitude: { type: Number, required: true },
+      latitude: { type: String, required: true },
+      longitude: { type: String, required: true },
       geohash: { type: String, required: true },
       // To search by geohash or type
       gs1pk: { type: String, value: 'checkpoint#' },
-      gs1sk: { type: String, value: 'geohash#${geohash}#${id}' }
+      gs1sk: { type: String, value: 'geohash#${geohash}' }
     },
     Checkin: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },
@@ -97,13 +94,13 @@ const Schema = {
       checkpointId: { type: String, required: true },
       routeId: { type: String, required: true },
       timestamp: { type: Date, required: true },
-      plate: { type: Date, required: true },
-      driverId: { type: Date, required: true },
+      plate: { type: String, required: true },
+      driverId: { type: String, required: true },
       // To search by type, vehicle or route
       gs1pk: { type: String, value: 'checkin#' },
-      gs1sk: { type: String, value: 'route#${routeId}#${id}' },
+      gs1sk: { type: String, value: 'route#${routeId}' },
       gs2pk: { type: String, value: 'checkin#' },
-      gs2sk: { type: String, value: 'route#${plate}#${id}' }
+      gs2sk: { type: String, value: 'route#${plate}' }
     }
   },
   params: {

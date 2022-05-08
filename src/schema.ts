@@ -62,10 +62,9 @@ const Schema = {
       gs1sk: { type: String, value: 'company#${city}' }
     },
     Route: {
-      pk: { type: String, value: 'route#${routeId}' },
-      sk: { type: String, value: 'route#${routeId}' },
-      id: { type: String, generate: 'ulid', validate: Match.ulid },
-      routeId: { type: String, required: true },
+      pk: { type: String, value: 'route#${origin}#${destination}#${id}}' },
+      sk: { type: String, value: 'route#' },
+      id: { type: String, required: true },
       origin: { type: String, required: true },
       destination: { type: String, required: true },
       geojson: { type: String, required: true },

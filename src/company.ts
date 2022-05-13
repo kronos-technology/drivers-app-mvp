@@ -2,14 +2,16 @@ import table from './util';
 
 export type Company = {
   companyId: String;
+  name: String;
   phone: String;
-  address: String;
-  email: String;
+  address?: String;
+  email?: String;
   city: String;
 };
 
 export type CompanyUpdate = {
   companyId: String;
+  name?: String;
   phone?: String;
   address?: String;
   email?: String;

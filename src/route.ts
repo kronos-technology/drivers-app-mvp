@@ -1,29 +1,27 @@
 import table from './util';
 
-export type Driver = {
-  driverId: String;
-  name: String;
-  lastName: String;
-  companyId: String;
-  birthdate: String;
-  phone: String;
+export type Route = {
+  routeId: String;
+  origin: String;
+  destination: String;
+  geojson: String;
+  checkpoints: Array<String>;
 };
-export type DriverUpdate = {
-  driverId: String;
-  name?: String;
-  lastName?: String;
-  companyId?: String;
-  birthdate?: String;
-  phone?: String;
+export type RouteUpdate = {
+  routeId: String;
+  origin?: String;
+  destination?: String;
+  geojson?: String;
+  checkpoints?: Array<String>;
 };
 
-const Driver = table.getModel('Driver');
+const RouteModel = table.getModel('Route');
 
-async function create(driverInfo: Driver) {
+async function create(driverInfo: Route) {
   console.log('Creating new driver in database');
   try {
-    const newDriver = await Driver.create(driverInfo, { exists: false });
-    return newDriver;
+    const newRoute = await RouteModel.create(driverInfo, { exists: false });
+    return newRoute;
   } catch (err) {
     console.log('DynamoDB error: ', err);
     return null;
@@ -33,7 +31,7 @@ async function create(driverInfo: Driver) {
 async function get(id: String) {
   console.log('Retrieving driver with id: ', id);
   try {
-    const driverInfo = await Driver.get({ driverId: id });
+    const driverInfo = await RouteModel.get({ driverId: id });
     console.log(driverInfo);
     return driverInfo;
   } catch (error) {
@@ -45,7 +43,7 @@ async function get(id: String) {
 async function list() {
   console.log('Listing drivers in database');
   try {
-    const driversList = await Driver.find({}, { index: 'gs1' });
+    const driversList = await RouteModel.find({}, { index: 'gs1' });
     return driversList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
@@ -56,7 +54,10 @@ async function list() {
 async function listByCompany(id: String) {
   console.log('Listing drivers for company ', id);
   try {
-    const driversList = await Driver.find({ companyId: id }, { index: 'gs1' });
+    const driversList = await RouteModel.find(
+      { companyId: id },
+      { index: 'gs1' }
+    );
     return driversList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
@@ -64,10 +65,10 @@ async function listByCompany(id: String) {
   }
 }
 
-async function update(data: DriverUpdate) {
-  console.log('Updating driver ', data.driverId);
+async function update(data: RouteUpdate) {
+  console.log('Updating driver ', data.routeId);
   try {
-    const driver = await Driver.update(data);
+    const driver = await RouteModel.update(data);
     return driver;
   } catch (error) {
     console.log('DynamoDB error: ', error);
@@ -78,7 +79,7 @@ async function update(data: DriverUpdate) {
 async function remove(id: String) {
   console.log('Deleting driver ', id);
   try {
-    const removed = await Driver.remove({ driverId: id });
+    const removed = await RouteModel.remove({ driverId: id });
     return removed;
   } catch (error) {
     console.log('DynamoDB error: ', error);

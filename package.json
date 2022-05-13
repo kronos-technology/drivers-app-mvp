@@ -39,6 +39,7 @@
     "@aws-cdk/aws-lambda": "^1.152.0",
     "@aws-cdk/core": "^1.153.1",
     "@aws-sdk/client-dynamodb": "^3.78.0",
+    "cdk-pipelines-github": "^0.2.60",
     "constructs": "^10.0.0",
     "dynamodb-onetable": "^2.3.6",
     "source-map-support": "^0.5.16"

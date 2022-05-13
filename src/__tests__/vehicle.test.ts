@@ -50,7 +50,7 @@ test('List vehicles by company', async () => {
 
 test('Get vehicle by plate', async () => {
   const testId = 'ZIY246';
-  const response = await vehicleLib.getById(testId);
+  const response = await vehicleLib.get(testId);
   expect(response).toBeDefined();
 });
 
@@ -65,7 +65,7 @@ test('Update vehicle status', async () => {
 
 test('Delete vehicle', async () => {
   const id = 'ZIY246';
-  const vehicle = await vehicleLib.getById(id);
+  const vehicle = await vehicleLib.get(id);
   const removed = await vehicleLib.remove(id);
   console.log('Vehicle removed: ', removed);
   expect(removed).toEqual(vehicle);

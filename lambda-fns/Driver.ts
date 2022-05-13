@@ -31,7 +31,7 @@ async function createDriver(driver_data) {
 }
 
 async function getDriverById(id) {
-  console.log('Retreving driver with id: ', id);
+  console.log('Retrieving driver with id: ', id);
   try {
     const driverInfo = await Driver.get({ driver_id: id });
     console.log(driverInfo);

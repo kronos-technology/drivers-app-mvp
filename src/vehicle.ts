@@ -32,8 +32,8 @@ async function create(vehicleInfo: Vehicle) {
   }
 }
 
-async function getById(id: String) {
-  console.log('Retreving vehicle with id: ', id);
+async function get(id: String) {
+  console.log('Retrieving vehicle with id: ', id);
   try {
     const vehicleInfo = await VehicleModel.get({ plate: id });
     console.log(vehicleInfo);
@@ -90,4 +90,4 @@ async function remove(id: String) {
     return null;
   }
 }
-export { list, listByCompany, getById, create, update, remove };
+export { list, listByCompany, get, create, update, remove };

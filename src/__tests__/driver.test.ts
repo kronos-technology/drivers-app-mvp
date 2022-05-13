@@ -52,7 +52,7 @@ test('List drivers by company', async () => {
 
 test('Get driver by Id', async () => {
   const testId = '1070959307';
-  const response = await driverLib.getById(testId);
+  const response = await driverLib.get(testId);
   expect(response).toBeDefined();
 });
 
@@ -68,7 +68,7 @@ test('Update driver name', async () => {
 
 test('Delete driver', async () => {
   const id = '19134629 ';
-  const driver = await driverLib.getById(id);
+  const driver = await driverLib.get(id);
   const removed = await driverLib.remove(id);
   console.log('Driver removed: ', removed);
   expect(removed).toEqual(driver);

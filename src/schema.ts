@@ -88,7 +88,7 @@ const Schema = {
       gs1pk: { type: String, value: 'route#${routeId}' }
     },
     Checkpoint: {
-      pk: { type: String, value: 'route#${id}' },
+      pk: { type: String, value: 'checkpoint#${checkpointId}' },
       sk: { type: String, value: 'checkpoint#' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       routeId: { type: String, required: true },

@@ -60,6 +60,37 @@ test('Delete company', async () => {
   console.log('company removed: ', removed);
   expect(removed).toEqual(company);
 });
+
+test('Assign route to company', async () => {
+  const companyId = 'AYACUCHO';
+  const routeId = 'FACA-BOGO-13';
+  const addedRoute = await companyLib.assignRoute(companyId, routeId);
+  console.log(
+    `Route ${routeId} assigned to company ${companyId}. ${addedRoute}`
+  );
+  expect(addedRoute).toBeDefined();
+});
+
+test('Unassign route from company', async () => {
+  const companyId = 'SABANA';
+  const routeId = 'FACA-BOGO-13';
+  const addedRoute = await companyLib.unassignRoute(companyId, routeId);
+  console.log(
+    `Route ${routeId} unassigned from company ${companyId}. ${JSON.stringify(
+      addedRoute
+    )}`
+  );
+  expect(addedRoute).toBeDefined();
+});
+
+test('Get assigned routes', async () => {
+  const companyId = 'SABANA';
+  const assignedRoutes = await companyLib.getAssignedRoutes(companyId);
+  console.log(
+    `Routes assigned to company ${companyId}: ${JSON.stringify(assignedRoutes)}`
+  );
+  expect(assignedRoutes).toBeDefined();
+});
 // required with this small example
 // to make the isolatedModules config happy
 export {};

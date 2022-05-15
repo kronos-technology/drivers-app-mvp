@@ -18,6 +18,7 @@ export type CompanyUpdate = {
   city?: String;
 };
 const CompanyModel = table.getModel('Company');
+const RouteInCompany = table.getModel('RouteInCompany');
 
 async function create(companyInfo: Company) {
   console.log('Creating new company in database');
@@ -55,20 +56,6 @@ async function list() {
   }
 }
 
-async function listByCompany(id: String) {
-  console.log('Listing companies for company ', id);
-  try {
-    const companiesList = await CompanyModel.find(
-      { companyId: id },
-      { index: 'gs1' }
-    );
-    return companiesList;
-  } catch (error) {
-    console.log('DynamoDB error: ', error);
-    return null;
-  }
-}
-
 async function update(data: CompanyUpdate) {
   console.log('Updating company ', data.companyId);
   try {
@@ -90,4 +77,51 @@ async function remove(id: String) {
     return null;
   }
 }
-export { list, listByCompany, get, create, update, remove };
+
+async function assignRoute(companyId: String, routeId: String) {
+  try {
+    const addedRoute = await RouteInCompany.create({
+      companyId: companyId,
+      routeId: routeId
+    });
+    return addedRoute;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+
+async function unassignRoute(companyId: String, routeId: String) {
+  console.log(`Deleting route ${routeId} from company ${companyId}`);
+  try {
+    const removedRoute = await RouteInCompany.remove({
+      companyId: companyId,
+      routeId: routeId
+    });
+    return removedRoute;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+
+async function getAssignedRoutes(companyId: String) {
+  console.log(`Retrieving routes assigned to company ${companyId}`);
+  try {
+    const assignedRoutes = await RouteInCompany.find({ companyId: companyId });
+    return assignedRoutes;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+export {
+  list,
+  get,
+  create,
+  update,
+  remove,
+  assignRoute,
+  getAssignedRoutes,
+  unassignRoute
+};

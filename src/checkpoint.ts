@@ -9,6 +9,7 @@ export type Checkpoint = {
 };
 
 const checkpointModel = table.getModel('checkpoint');
+const RouteInCheckpointModel = table.getModel('RouteInCheckpoint');
 
 async function create(checkpointInfo: Checkpoint) {
   console.log('Creating new checkpoint in DB');
@@ -72,4 +73,20 @@ async function remove(id: String) {
     return null;
   }
 }
-export { get, list, listByRoute, create, remove };
+
+async function addRoute(id: String, routeId: String) {}
+
+async function getAssignedRoutes(id: String) {}
+
+async function deleteRoute(id: String, routeId: String) {}
+
+export {
+  get,
+  list,
+  listByRoute,
+  create,
+  remove,
+  addRoute,
+  getAssignedRoutes,
+  deleteRoute
+};

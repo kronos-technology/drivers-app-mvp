@@ -85,7 +85,8 @@ const Schema = {
       companyId: { type: String, required: true },
       routeId: { type: String, required: true },
       // To search all companies assigned to a route,
-      gs1pk: { type: String, value: 'route#${routeId}' }
+      gs1pk: { type: String, value: 'route#${routeId}' },
+      gs1sk: { type: String, value: 'route#company' }
     },
     Checkpoint: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },

@@ -1,27 +1,20 @@
 import table from './util';
 
 export type Route = {
-  routeId: String;
   origin: String;
+  intermediates?: Array<String>;
   destination: String;
   geojson: String;
-  checkpoints: Array<String>;
-};
-export type RouteUpdate = {
-  routeId: String;
-  origin?: String;
-  destination?: String;
-  geojson?: String;
-  checkpoints?: Array<String>;
+  companies?: String;
 };
 
 const RouteModel = table.getModel('Route');
 
-async function create(driverInfo: Route) {
-  console.log('Creating new driver in database');
+async function create(routeInfo: Route) {
+  console.log('Creating new route in database');
   try {
-    const newRoute = await RouteModel.create(driverInfo, { exists: false });
-    return newRoute;
+    const created = await RouteModel.create(routeInfo, { exists: false });
+    return created;
   } catch (err) {
     console.log('DynamoDB error: ', err);
     return null;
@@ -29,11 +22,11 @@ async function create(driverInfo: Route) {
 }
 
 async function get(id: String) {
-  console.log('Retrieving driver with id: ', id);
+  console.log('Retrieving route with id: ', id);
   try {
-    const driverInfo = await RouteModel.get({ driverId: id });
-    console.log(driverInfo);
-    return driverInfo;
+    const routeInfo = await RouteModel.get({ routeId: id });
+    console.log(routeInfo);
+    return routeInfo;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
@@ -41,35 +34,37 @@ async function get(id: String) {
 }
 
 async function list() {
-  console.log('Listing drivers in database');
+  console.log('Listing routes in database');
   try {
-    const driversList = await RouteModel.find({}, { index: 'gs1' });
-    return driversList;
+    const routesList = await RouteModel.find({}, { index: 'gs1' });
+    return routesList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
   }
 }
 
-async function listByCompany(id: String) {
-  console.log('Listing drivers for company ', id);
+async function listByOrigin(origin: String) {
+  console.log('Listing routes with origin ', origin);
   try {
-    const driversList = await RouteModel.find(
-      { companyId: id },
+    const routesList = await RouteModel.find(
+      { origin: origin },
       { index: 'gs1' }
     );
-    return driversList;
+    return routesList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
   }
 }
-
-async function update(data: RouteUpdate) {
-  console.log('Updating driver ', data.routeId);
+async function listByDestination(destination: String) {
+  console.log('Listing routes with destination ', destination);
   try {
-    const driver = await RouteModel.update(data);
-    return driver;
+    const routesList = await RouteModel.find(
+      { destination: destination },
+      { index: 'gs2' }
+    );
+    return routesList;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
@@ -77,13 +72,13 @@ async function update(data: RouteUpdate) {
 }
 
 async function remove(id: String) {
-  console.log('Deleting driver ', id);
+  console.log('Deleting route ', id);
   try {
-    const removed = await RouteModel.remove({ driverId: id });
+    const removed = await RouteModel.remove({ routeId: id });
     return removed;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
   }
 }
-export { list, listByCompany, get, create, update, remove };
+export { list, listByOrigin, listByDestination, get, create, remove };

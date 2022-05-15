@@ -81,10 +81,7 @@ const Schema = {
     RouteInCompany: {
       pk: { type: String, value: 'company#${companyId}' },
       sk: { type: String, value: 'route#${routeId}' },
-<<<<<<< HEAD
       id: { type: String, generate: 'ulid', validate: Match.ulid },
-=======
->>>>>>> f651ce518d9b169483698d8cf21e856cd8ea89ba
       companyId: { type: String, required: true },
       routeId: { type: String, required: true },
       // To search all companies assigned to a route,

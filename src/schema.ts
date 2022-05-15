@@ -110,10 +110,7 @@ const Schema = {
     RouteInCheckpoint: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },
       sk: { type: String, value: 'route#${routeId}' },
-<<<<<<< HEAD
       id: { type: String, generate: 'ulid', validate: Match.ulid },
-=======
->>>>>>> f651ce518d9b169483698d8cf21e856cd8ea89ba
       checkpointId: { type: String, required: true },
       routeId: { type: String, required: true },
       destination: { type: String, required: true },

@@ -94,7 +94,7 @@ const Schema = {
       routeId: { type: String, required: true },
       checkpointId: { type: String, required: true },
       description: { type: String, required: true },
-      latitude: { type: String, required: true },
+      latitude: { type: String, default: ' ' },
       longitude: { type: String, required: true },
       geohash: { type: String, required: true },
       // To search by geohash or type

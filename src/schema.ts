@@ -92,7 +92,6 @@ const Schema = {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },
       sk: { type: String, value: 'checkpoint#' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
-      routeId: { type: String, required: true },
       checkpointId: { type: String, required: true },
       description: { type: String, required: true },
       latitude: { type: String, default: ' ' },
@@ -115,7 +114,7 @@ const Schema = {
       // To search all routes monitored by one checkpoint
       // and filter by destination
       gs1pk: { type: String, value: 'route#${routeId}' },
-      gs1sk: { type: String, value: 'destination#${destination}' }
+      gs1sk: { type: String, value: 'route#checkpoint' }
     },
     Checkin: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },

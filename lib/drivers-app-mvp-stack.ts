@@ -62,7 +62,7 @@ export class DriversAppMvpStack extends cdk.Stack {
       {
         runtime: lambda.Runtime.NODEJS_14_X,
         handler: 'main.handler',
-        code: lambda.Code.fromAsset('lambda-fns'),
+        code: lambda.Code.fromAsset('../src/lambda/api'),
         memorySize: 1024
       }
     );

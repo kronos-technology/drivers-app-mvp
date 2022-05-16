@@ -1,4 +1,4 @@
-import * as routeLib from '../route';
+import * as routeLib from '../../database/route';
 
 test('Create route', async () => {
   const data: Array<routeLib.Route> = [

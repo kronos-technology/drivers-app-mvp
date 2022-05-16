@@ -1,7 +1,7 @@
 // requireActual ensures you get the real file
 // instead of an automock
 // we use import type and <typeof ...> to still get types
-import * as vehicleLib from '../vehicle';
+import * as vehicleLib from '../../database/vehicle';
 
 test('Create vehicle', async () => {
   const data: Array<vehicleLib.Vehicle> = [

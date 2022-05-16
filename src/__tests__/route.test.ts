@@ -6,49 +6,42 @@ test('Create route', async () => {
       origin: 'FACATATIVA',
       destination: 'BOGOTA',
       intermediates: ['MADRID', 'CALLE13'],
-      companies: 'AYACUCHO-SABANA-AMERICANA-GALAXIA',
       geojson: 's3://locationtoroute1.geojson'
     },
     {
       origin: 'FACATATIVA',
       destination: 'BOGOTA',
       intermediates: ['VARIANTE', 'CALLE13'],
-      companies: 'AYACUCHO-SABANA-AMERICANA-GALAXIA',
       geojson: 's3://locationtoroute2.geojson'
     },
     {
       origin: 'FACATATIVA',
       destination: 'BOGOTA',
       intermediates: ['MOSQUERA', 'FUNZA', 'CALLE80'],
-      companies: 'CONDUCOOP',
       geojson: 's3://locationtoroute2.geojson'
     },
     {
       origin: 'MADRID',
       destination: 'BOGOTA',
       intermediates: ['CALLE13'],
-      companies: 'JUANXXIII',
       geojson: 's3://locationtoroute1.geojson'
     },
     {
       origin: 'MADRID',
       destination: 'BOGOTA',
       intermediates: ['MOSQUERA', 'FUNZA', 'CALLE80'],
-      companies: 'ESTRELLA',
       geojson: 's3://locationtoroute1.geojson'
     },
     {
       origin: 'FACATATIVA',
       intermediates: ['CORSO'],
       destination: 'BOJACA',
-      companies: 'VILLETAX-JUANXXIII',
       geojson: 's3://locationtoroute2.geojson'
     },
     {
       origin: 'FACATATIVA',
       destination: 'ZIPAQUIRA',
       intermediates: ['MOSQUERA', 'FUNZA', 'COTA', 'CHIA'],
-      companies: 'COOTRANSZIPA-UNIDOS',
       geojson: 's3://locationtoroute2.geojson'
     }
   ];

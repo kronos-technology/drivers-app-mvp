@@ -5,10 +5,16 @@ export type Route = {
   intermediates?: Array<String>;
   destination: String;
   geojson: String;
-  companies?: String;
+};
+
+export type RouteUpdate = {
+  id: String;
+  intermediates?: Array<String>;
+  geojson: String;
 };
 
 const RouteModel = table.getModel('Route');
+const RouteInCheckpointModel = table.getModel('RouteInCheckpoint');
 
 async function create(routeInfo: Route) {
   console.log('Creating new route in database');
@@ -27,6 +33,21 @@ async function get(id: String) {
     const routeInfo = await RouteModel.get({ routeId: id });
     console.log(routeInfo);
     return routeInfo;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
+
+async function getCheckpoints(routeId: String) {
+  console.log(`Retrieving checkpoints in route: ${routeId}`);
+  try {
+    const checkpoints = await RouteInCheckpointModel.find(
+      { routeId: routeId },
+      { index: 'gs1' }
+    );
+    console.log(checkpoints);
+    return checkpoints;
   } catch (error) {
     console.log('DynamoDB error: ', error);
     return null;
@@ -70,6 +91,17 @@ async function listByDestination(destination: String) {
     return null;
   }
 }
+// TODO: Add unit test for this function
+async function update(data: RouteUpdate) {
+  console.log(`Updating route ${JSON.stringify(data)}`);
+  try {
+    const vehicle = await RouteModel.update(data);
+    return vehicle;
+  } catch (error) {
+    console.log('DynamoDB error: ', error);
+    return null;
+  }
+}
 
 async function remove(id: String) {
   console.log('Deleting route ', id);
@@ -81,4 +113,13 @@ async function remove(id: String) {
     return null;
   }
 }
-export { list, listByOrigin, listByDestination, get, create, remove };
+export {
+  list,
+  listByOrigin,
+  listByDestination,
+  get,
+  getCheckpoints,
+  create,
+  update,
+  remove
+};

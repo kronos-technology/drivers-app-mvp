@@ -4,6 +4,7 @@ import * as cognito from '@aws-cdk/aws-cognito';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as ddb from '@aws-cdk/aws-dynamodb';
 import * as lambda from '@aws-cdk/aws-lambda';
+import * as path from 'path';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends cdk.Stack {
@@ -62,7 +63,7 @@ export class DriversAppMvpStack extends cdk.Stack {
       {
         runtime: lambda.Runtime.NODEJS_14_X,
         handler: 'main.handler',
-        code: lambda.Code.fromAsset('../src/lambda/api'),
+        code: lambda.Code.fromAsset(path.join(__dirname, '../src/lambda/api')),
         memorySize: 1024
       }
     );

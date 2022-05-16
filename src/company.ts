@@ -108,7 +108,7 @@ async function unassignRoute(companyId: String, routeId: String) {
 async function getAssignedRoutes(companyId: String) {
   console.log(`Retrieving routes assigned to company ${companyId}`);
   try {
-    const assignedRoutes = await RouteInCompany.find({ companyId: companyId });
+    const assignedRoutes = await RouteInCompany.find({ companyId });
     return assignedRoutes;
   } catch (error) {
     console.log('DynamoDB error: ', error);

@@ -1,4 +1,4 @@
-import * as companyLib from '../../src/database/company';
+import * as companyLib from '../company';
 
 test('Create company', async () => {
   const data: Array<companyLib.Company> = [

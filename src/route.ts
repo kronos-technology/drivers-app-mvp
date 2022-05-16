@@ -93,7 +93,7 @@ async function listByDestination(destination: String) {
 }
 // TODO: Add unit test for this function
 async function update(data: RouteUpdate) {
-  console.log(`Updating route ${JSON.stringify(data)}`);
+  console.log(`Updating route -> ${JSON.stringify(data)}`);
   try {
     const vehicle = await RouteModel.update(data);
     return vehicle;

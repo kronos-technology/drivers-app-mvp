@@ -4,11 +4,12 @@ export type Checkpoint = {
   checkpointId: String;
   latitude: String;
   longitude: String;
+  city: String;
   geohash: String;
   description?: String;
 };
 
-const CheckpointModel = table.getModel('checkpoint');
+const CheckpointModel = table.getModel('Checkpoint');
 const RouteInCheckpointModel = table.getModel('RouteInCheckpoint');
 const CheckinModel = table.getModel('Checkin');
 
@@ -76,8 +77,8 @@ async function remove(id: String) {
 async function assignRoute(checkpointId: String, routeId: String) {
   try {
     const assigned = await RouteInCheckpointModel.create({
-      companyId: checkpointId,
-      routeId: routeId
+      checkpointId,
+      routeId
     });
     return assigned;
   } catch (error) {

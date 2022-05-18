@@ -1,7 +1,7 @@
 // requireActual ensures you get the real file
 // instead of an automock
 // we use import type and <typeof ...> to still get types
-import * as driverLib from '../../src/database/driver';
+import * as driverLib from '../driver';
 
 test('Create driver', async () => {
   const data: Array<driverLib.Driver> = [

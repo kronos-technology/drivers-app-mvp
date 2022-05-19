@@ -42,7 +42,7 @@ async function listByVehicle(plate: String, limit: number = 10) {
   try {
     const checkinList = await CheckinModel.find(
       { plate },
-      { index: 'gs2', limit }
+      { index: 'gs2', limit, reverse: true }
     );
     return checkinList;
   } catch (error) {

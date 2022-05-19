@@ -117,7 +117,7 @@ const Schema = {
     },
     Checkin: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },
-      sk: { type: String, value: 'checkin#${timestamp}#plate#${plate}' },
+      sk: { type: String, value: '${timestamp}#${plate}' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       checkpointId: { type: String, required: true },
       routeId: { type: String, required: true },
@@ -128,7 +128,7 @@ const Schema = {
       gs1pk: { type: String, value: 'checkin#' },
       gs1sk: { type: String, value: 'route#${routeId}' },
       gs2pk: { type: String, value: 'checkin#' },
-      gs2sk: { type: String, value: 'vehicle#${plate}' }
+      gs2sk: { type: String, value: '${timestamp}#${plate}' }
     }
   },
   params: {

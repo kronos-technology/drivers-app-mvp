@@ -126,7 +126,7 @@ const Schema = {
       driverId: { type: String, required: true },
       // To search by type, vehicle or route
       gs1pk: { type: String, value: 'checkin#' },
-      gs1sk: { type: String, value: 'route#${routeId}' },
+      gs1sk: { type: String, value: '${timestamp}#${routeId}' },
       gs2pk: { type: String, value: 'checkin#' },
       gs2sk: { type: String, value: '${timestamp}#${plate}' }
     }

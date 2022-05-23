@@ -19,7 +19,7 @@ class BaseEntity {
 
   constructor(params) {
     if (!params.tableName) {
-      params.tableName = 'DriversAppMvpStack-DbTableED196C5F-2JLYN2IVIIPA';
+      params.tableName = tableName;
     }
     this.table = new Table({
       name: params.tableName,

@@ -39,7 +39,7 @@ const routeTestData: Array<RouteType> = [
   }
 ];
 
-describe.only('route tests', () => {
+describe('route tests', () => {
   let routeManager: Route;
 
   beforeAll(async () => {
@@ -98,15 +98,15 @@ describe.only('route tests', () => {
   });
 
   test('delete route', async () => {
-    let deletedroutes: Array<EntityModel | Response | undefined> = [];
+    let deletedRoutes: Array<EntityModel | Response | undefined> = [];
     for (const routeInfo of routeTestData) {
       const routeId: string = routeInfo.routeId;
       const deleted = await routeManager.delete(routeId);
-      deletedroutes.push(deleted);
+      deletedRoutes.push(deleted);
       console.log(`route deleted ${JSON.stringify(deleted, null, 2)}`);
       expect(deleted).toBeDefined();
     }
-    expect(deletedroutes).toHaveLength(routeTestData.length);
+    expect(deletedRoutes).toHaveLength(routeTestData.length);
     await new Promise((r) => setTimeout(r, 2000));
   });
   // required with this small example

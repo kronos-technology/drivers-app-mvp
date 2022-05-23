@@ -28,16 +28,14 @@ const vehicleTestData: Array<VehicleType> = [
   }
 ];
 
-describe.only('Vehicle Entity Tests', () => {
+describe('vehicle tests', () => {
   let vehicleManager: Vehicle;
-  let testVehicle: VehicleType;
-  let vehicleList: Array<EntityModel> | undefined;
 
   beforeAll(async () => {
     vehicleManager = new Vehicle();
   });
 
-  test.skip('create test vehicles', async () => {
+  test('create test vehicles', async () => {
     let createdVehicles: Array<EntityModel | Response> = [];
     for (const vehicleInfo of vehicleTestData) {
       const created = await vehicleManager.create(vehicleInfo);
@@ -81,7 +79,7 @@ describe.only('Vehicle Entity Tests', () => {
     expect(response).toBeDefined();
   });
 
-  test.only('delete vehicle', async () => {
+  test('delete vehicle', async () => {
     let deletedVehicles: Array<EntityModel | Response | undefined> = [];
     for (const vehicleInfo of vehicleTestData) {
       const plate: string = vehicleInfo.plate;

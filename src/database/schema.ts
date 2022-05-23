@@ -65,6 +65,7 @@ const Schema = {
       pk: { type: String, value: 'route#${id}' },
       sk: { type: String, value: 'route#' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
+      routeId: { type: String, required: true },
       origin: { type: String, required: true },
       destination: { type: String, required: true },
       intermediates: { type: Set, default: [] },

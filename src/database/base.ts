@@ -95,7 +95,7 @@ class BaseEntity {
   }
 
   async delete(id): Promise<EntityModel | undefined> {
-    console.log(`Deleting  ${this.entity} with id ${id}`);
+    console.log(`Deleting ${this.entity} with id ${id}`);
     let idObject = {};
     idObject[this.idField] = id;
     try {
@@ -140,4 +140,13 @@ export type VehicleType = {
   companyId: string;
   currentDriverId?: string;
 };
+
+export type RouteType = {
+  routeId: string;
+  origin: string;
+  intermediates?: Array<String>;
+  destination: string;
+  geojson: string;
+};
+
 export default BaseEntity;

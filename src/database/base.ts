@@ -2,7 +2,6 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import Dynamo from 'dynamodb-onetable/Dynamo';
 import { Table, Entity, Model } from 'dynamodb-onetable';
 import Schema from './schema';
-import { Vehicle } from './vehicle';
 
 /*
     Single-table schema and setup. This is used for general access and by `createTable`
@@ -144,9 +143,35 @@ export type VehicleType = {
 export type RouteType = {
   routeId: string;
   origin: string;
-  intermediates?: Array<String>;
+  intermediates?: Array<string>;
   destination: string;
   geojson: string;
+};
+
+export type DriverType = {
+  driverId: string;
+  name: string;
+  lastName: string;
+  companyId: string;
+  birthdate: string;
+  phone: string;
+};
+
+export type CompanyType = {
+  companyId: string;
+  name: string;
+  phone: string;
+  address?: string;
+  email?: string;
+  city: string;
+};
+
+export type CheckpointType = {
+  routeId: string;
+  checkpointId: string;
+  latitude: string;
+  longitude: string;
+  geohash: string;
 };
 
 export default BaseEntity;

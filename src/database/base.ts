@@ -174,4 +174,12 @@ export type CheckpointType = {
   geohash: string;
 };
 
+export type CheckinType = {
+  checkpointId: string;
+  routeId: string;
+  timestamp: string;
+  plate: string;
+  driverId: string;
+};
+
 export default BaseEntity;

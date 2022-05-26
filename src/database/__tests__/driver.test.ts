@@ -1,7 +1,7 @@
 // requireActual ensures you get the real file
 // instead of an automock
 // we use import type and <typeof ...> to still get types
-import { Driver } from '../entities';
+import { Driver } from '../adapter';
 import { EntityModel, DriverType, Response } from '../base';
 
 const driverTestData: Array<DriverType> = [
@@ -31,14 +31,14 @@ const driverTestData: Array<DriverType> = [
   }
 ];
 
-describe.only('driver tests', () => {
+describe('driver tests', () => {
   let driverManager: Driver;
 
   beforeAll(async () => {
     driverManager = new Driver();
   });
 
-  test.skip('create test drivers', async () => {
+  test('create test drivers', async () => {
     let createdDrivers: Array<EntityModel | Response> = [];
     for (const driverInfo of driverTestData) {
       const created = await driverManager.create(driverInfo);
@@ -89,7 +89,7 @@ describe.only('driver tests', () => {
     expect(response).toBeDefined();
   });
 
-  test.only('delete driver', async () => {
+  test('delete driver', async () => {
     let deletedDrivers: Array<EntityModel | Response | undefined> = [];
     for (const driverInfo of driverTestData) {
       const driverId: string = driverInfo.driverId;

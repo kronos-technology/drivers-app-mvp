@@ -1,4 +1,4 @@
-import { Company } from '../entities';
+import { Company } from '../adapter';
 import { EntityModel, CompanyType, Response } from '../base';
 
 const companyTestData: Array<CompanyType> = [

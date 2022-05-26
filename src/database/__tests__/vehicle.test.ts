@@ -1,7 +1,7 @@
 // requireActual ensures you get the real file
 // instead of an automock
 // we use import type and <typeof ...> to still get types
-import { Vehicle } from '../entities';
+import { Vehicle } from '../adapter';
 import { EntityModel, VehicleType, Response } from '../base';
 
 const vehicleTestData: Array<VehicleType> = [

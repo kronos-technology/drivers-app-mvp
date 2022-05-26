@@ -1,4 +1,4 @@
-import { Route } from '../entities';
+import { Route } from '../adapter';
 import { EntityModel, RouteType, Response } from '../base';
 
 const routeTestData: Array<RouteType> = [

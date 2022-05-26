@@ -62,7 +62,7 @@ const Schema = {
       gs1sk: { type: String, value: 'company#${city}' }
     },
     ROUTE: {
-      pk: { type: String, value: 'route#${id}' },
+      pk: { type: String, value: 'route#${routeId}' },
       sk: { type: String, value: 'route#' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       routeId: { type: String, required: true },
@@ -117,17 +117,17 @@ const Schema = {
       gs1sk: { type: String, value: 'route#checkpoint' }
     },
     CHECKIN: {
-      pk: { type: String, value: 'checkpoint#${checkpointId}' },
-      sk: { type: String, value: '${timestamp}#${plate}' },
+      pk: { type: String, value: 'route#${routeId}' },
+      sk: { type: String, value: '${timestamp}#${checkpointId}' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       checkpointId: { type: String, required: true },
       routeId: { type: String, required: true },
       timestamp: { type: Date, required: true },
       plate: { type: String, required: true },
       driverId: { type: String, required: true },
-      // To search by type, vehicle or route
+      // To search by type, vehicle or checkpoint
       gs1pk: { type: String, value: 'checkin#' },
-      gs1sk: { type: String, value: '${timestamp}#${routeId}' },
+      gs1sk: { type: String, value: '${timestamp}#${checkpointId}' },
       gs2pk: { type: String, value: 'checkin#' },
       gs2sk: { type: String, value: '${timestamp}#${plate}' }
     }

@@ -1,54 +1,68 @@
-import table from './util';
+import BaseEntity, { EntityModel, Response } from './base';
 
-export type Checkin = {
-  checkpointId: String;
-  routeId: String;
-  timestamp: String;
-  plate: String;
-  driverId: String;
-};
-
-const CheckinModel = table.getModel('Checkin');
-
-async function create(checkinInfo: Checkin) {
-  console.log('Creating new checkin in DB');
-  try {
-    const newCheckin = await CheckinModel.create(checkinInfo, {
-      exists: false
-    });
-    return newCheckin;
-  } catch (err) {
-    console.log('DynamoDB error: ', err);
-    return null;
+class Checkin extends BaseEntity {
+  constructor(tableName?: string) {
+    super({ tableName, modelName: 'CHECKIN' });
   }
-}
 
-async function listByRoute(routeId: String, limit: number = 10) {
-  console.log(`Listing checkins for route ${routeId}`);
-  try {
-    const checkinList = await CheckinModel.find(
-      { routeId },
-      { index: 'gs1', limit }
+  override async create(data: any): Promise<EntityModel | Response> {
+    const daysToRetain = 2;
+    const creationDate = new Date(Date.parse(data.timestamp));
+    const expirationDate: Date = creationDate;
+    expirationDate.setDate(creationDate.getDate() + daysToRetain);
+    data['expire'] = expirationDate;
+    return super.create(data);
+  }
+
+  async getCheckinHistory(checkpointId: string, limit: number = 10) {
+    console.log(`Listing checkins in checkpoint ${checkpointId}`);
+    try {
+      //      this.table.setContext({ checkpointId });
+      const checkinList = await this.model.find(
+        { pk: `checkpoint#${checkpointId}`, sk: { begins: `checkin#` } },
+        {
+          limit,
+          reverse: true,
+          log: true
+        }
+      );
+      return checkinList;
+    } catch (error) {
+      console.error(`DynamoDB error ${error}`);
+      return null;
+    } finally {
+      //     this.table.clearContext();
+    }
+  }
+
+  async getCheckinHistoryByRoute(
+    checkpointId: string,
+    routeId: string,
+    limit: number = 10
+  ) {
+    console.log(
+      `Listing checkins in checkpoint ${checkpointId} for the route ${routeId}`
     );
-    return checkinList;
-  } catch (error) {
-    console.log('DynamoDB error: ', error);
-    return null;
+    try {
+      const checkinList = await this.model.find(
+        {
+          pk: `checkpoint#${checkpointId}`,
+          sk: { begins: `checkin#${routeId}` }
+        },
+        {
+          limit,
+          reverse: true,
+          log: true
+        }
+      );
+      return checkinList;
+    } catch (error) {
+      console.error(`DynamoDB error ${error}`);
+      return null;
+    } finally {
+      this.table.clearContext();
+    }
   }
 }
 
-async function listByVehicle(plate: String, limit: number = 10) {
-  console.log('Listing checkins by vehicle: ', plate);
-  try {
-    const checkinList = await CheckinModel.find(
-      { plate },
-      { index: 'gs2', limit, reverse: true }
-    );
-    return checkinList;
-  } catch (error) {
-    console.log('DynamoDB error: ', error);
-    return null;
-  }
-}
-
-export { listByRoute, listByVehicle, create };
+export { Checkin };

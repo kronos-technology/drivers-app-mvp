@@ -22,7 +22,9 @@ class BaseEntity {
     }
     this.table = new Table({
       name: params.tableName,
-      client: new Dynamo({ client: new DynamoDBClient({}) }),
+      client: new Dynamo({
+        client: new DynamoDBClient({})
+      }),
       logger: true,
       schema: Schema
     });
@@ -167,11 +169,12 @@ export type CompanyType = {
 };
 
 export type CheckpointType = {
-  routeId: string;
   checkpointId: string;
   latitude: string;
   longitude: string;
   geohash: string;
+  city: string;
+  description: string;
 };
 
 export type CheckinType = {

@@ -102,7 +102,8 @@ export class DriversAppMvpStack extends cdk.Stack {
     const dbTable = new ddb.Table(this, 'DbTable', {
       billingMode: ddb.BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'pk', type: ddb.AttributeType.STRING },
-      sortKey: { name: 'sk', type: ddb.AttributeType.STRING }
+      sortKey: { name: 'sk', type: ddb.AttributeType.STRING },
+      timeToLiveAttribute: 'expire'
     });
 
     // Add a global secondary index to enable another data access pattern

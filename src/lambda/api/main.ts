@@ -5,7 +5,7 @@ import {
   Driver,
   Route,
   Vehicle
-} from '../../database/adapter';
+} from './database/adapter';
 
 export const handler = async (event) => {
   console.log(`Event: ${JSON.stringify(event, null, 2)}`);

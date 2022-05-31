@@ -5,7 +5,7 @@ class Checkpoint extends BaseEntity {
   routeModel: Model<EntityModel>;
   constructor(tableName?: string) {
     super({ tableName, modelName: 'CHECKPOINT', idField: 'checkpointId' });
-    this.routeModel = this.table.getModel<EntityModel>('ROUTE');
+    this.routeModel = this.table.getModel<EntityModel>('ROUTEINCHECKPOINT');
   }
 
   async assignRoute(checkpointId: string, routeId: string) {

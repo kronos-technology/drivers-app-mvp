@@ -75,8 +75,19 @@ describe('route tests', () => {
         2
       )}`
     );
+    expect(list).toBeDefined();
     expect(list).toBeInstanceOf(Array);
-    expect(list).toHaveLength(1);
+  });
+
+  test('list routes by destination', async () => {
+    const dest = 'BOGOTA';
+    const list = await routeManager.listByOrigin(dest);
+    const _list = JSON.stringify(list);
+    console.log(
+      `List of all routes with origin: ${dest.toLowerCase()}: ${_list}`
+    );
+    expect(list).toBeDefined();
+    expect(list).toBeInstanceOf(Array);
   });
 
   test('get route', async () => {

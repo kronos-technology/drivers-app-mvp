@@ -5,6 +5,7 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   verbose: false,
   modulePathIgnorePatterns: ['./cdk.out/', './dist/', './node_modules/'],
-  automock: false
+  automock: false,
+  collectCoverage: true
 };
 export default config;

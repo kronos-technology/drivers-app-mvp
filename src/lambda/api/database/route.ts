@@ -9,20 +9,6 @@ class Route extends BaseEntity {
       this.table.getModel<EntityModel>('ROUTEINCHECKPOINT');
   }
 
-  async getCheckpoints(routeId: string) {
-    console.log(`Retrieving checkpoints in route: ${routeId}`);
-    try {
-      const checkpoints = await this.routeInCheckpointModel.find(
-        { routeId },
-        { index: 'gs1' }
-      );
-      return checkpoints;
-    } catch (error) {
-      console.error('DynamoDB error: ', error);
-      return null;
-    }
-  }
-
   async listByOrigin(origin: string) {
     console.log(`Listing routes with origin ${origin}`);
     try {

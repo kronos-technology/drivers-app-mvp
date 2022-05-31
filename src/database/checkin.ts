@@ -63,6 +63,22 @@ class Checkin extends BaseEntity {
       this.table.clearContext();
     }
   }
+
+  async deleteCheckinHistory() {
+    console.log('Deleting all checkins in DB');
+    try {
+      const checkinHistory = await this.model.remove(
+        { gs1pk: 'checkin#' },
+        { index: 'gs1', hidden: true, many: true }
+      );
+      const _history = JSON.stringify(checkinHistory, null, 2);
+      console.log(`Deleted Checkin history: ${_history}`);
+      return checkinHistory;
+    } catch (error) {
+      console.error(`DynamoDB error ${error}`);
+      return null;
+    }
+  }
 }
 
 export { Checkin };

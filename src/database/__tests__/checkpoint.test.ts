@@ -114,6 +114,39 @@ describe('checkpoint tests', () => {
     expect(response).toBeDefined();
   });
 
+  test('assign route to checkpoint', async () => {
+    const checkpointId: string = checkpointTestData[0].checkpointId;
+    const routeId: string = 'FACATA-VTEMAD-BOGOTA-13';
+    const assignedRoute = await checkpointManager.assignRoute(
+      checkpointId,
+      routeId
+    );
+    console.log(`Route ${routeId} assigned to checkpoint ${checkpointId} `);
+    expect(assignedRoute).toBeDefined();
+  });
+
+  test('get assigned routes to checkpoint', async () => {
+    const checkpointId: string = checkpointTestData[0].checkpointId;
+    const routeId: string = 'FACATA-VTEMAD-BOGOTA-13';
+    const assignedRoutes = await checkpointManager.getAssignedRoutes(
+      checkpointId
+    );
+    const _routes = JSON.stringify(assignedRoutes, null, 2);
+    console.log(`Routes assigned to checkpoint: ${routeId}: ${_routes}`);
+    expect(assignedRoutes).toBeDefined();
+  });
+
+  test('unassign route from checkpoint', async () => {
+    const checkpointId: string = checkpointTestData[0].checkpointId;
+    const routeId: string = 'FACATA-VTEMAD-BOGOTA-13';
+    const unassignedRoute = await checkpointManager.unassignRoute(
+      checkpointId,
+      routeId
+    );
+    const route = JSON.stringify(unassignedRoute, null, 2);
+    console.log(`Route unassigned from checkpoint: ${routeId}: ${route}`);
+  });
+
   test('delete checkpoint', async () => {
     let deletedCheckpoints: Array<EntityModel | Response | undefined> = [];
     for (const checkpointInfo of checkpointTestData) {

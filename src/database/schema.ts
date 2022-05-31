@@ -102,8 +102,8 @@ const Schema = {
       gs1pk: { type: String, value: 'checkpoint#' },
       gs1sk: { type: String, value: 'geohash#${geohash}' }
     },
-    // CheckpointInRoute represents a checkpoint contained
-    // in a route. It helps to model the many-to-many
+    // ROUTEINCHECKPOINT represents a checkpoint monitored
+    // by a route. It helps to model the many-to-many
     // relation between checkpoints and routes
     ROUTEINCHECKPOINT: {
       pk: { type: String, value: 'checkpoint#${checkpointId}' },
@@ -112,7 +112,6 @@ const Schema = {
       checkpointId: { type: String, required: true },
       routeId: { type: String, required: true },
       // To search all routes monitored by one checkpoint
-      // and filter by destination
       gs1pk: { type: String, value: 'route#${routeId}' },
       gs1sk: { type: String, value: 'route#checkpoint' }
     },

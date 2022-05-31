@@ -5,7 +5,7 @@ class Company extends BaseEntity {
   routeModel: Model<EntityModel>;
   constructor(tableName?: string) {
     super({ tableName, modelName: 'COMPANY', idField: 'companyId' });
-    this.routeModel = this.table.getModel<EntityModel>('ROUTE');
+    this.routeModel = this.table.getModel<EntityModel>('ROUTEINCOMPANY');
   }
 
   async assignRoute(companyId: string, routeId: string) {

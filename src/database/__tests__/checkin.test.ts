@@ -130,4 +130,11 @@ describe('checkin tests', () => {
 
     expect(list).toBeInstanceOf(Array);
   });
+
+  test('delete checkin history', async () => {
+    const deleted = await checkinManager.deleteCheckinHistory();
+    const _deleted = JSON.stringify(deleted, null, 2);
+    console.log(`Removed checkpoints: ${_deleted}`);
+    expect(_deleted).toBeDefined();
+  });
 });

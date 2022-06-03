@@ -3,6 +3,13 @@ import BaseEntity, { EntityModel, Response } from './base';
 class Checkin extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'CHECKIN' });
+    const ownPatterns = {
+      create: this.create,
+      'get-history': this.getCheckinHistory,
+      'get-history-by-route': this.getCheckinHistoryByRoute,
+      'delete-history': this.deleteCheckinHistory
+    };
+    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   override async create(data: any): Promise<EntityModel | Response> {
@@ -17,7 +24,6 @@ class Checkin extends BaseEntity {
   async getCheckinHistory(checkpointId: string, limit: number = 10) {
     console.log(`Listing checkins in checkpoint ${checkpointId}`);
     try {
-      //      this.table.setContext({ checkpointId });
       const checkinList = await this.model.find(
         { pk: `checkpoint#${checkpointId}`, sk: { begins: `checkin#` } },
         {
@@ -30,8 +36,6 @@ class Checkin extends BaseEntity {
     } catch (error) {
       console.error(`DynamoDB error ${error}`);
       return null;
-    } finally {
-      //     this.table.clearContext();
     }
   }
 

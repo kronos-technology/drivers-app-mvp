@@ -3,6 +3,8 @@ import BaseEntity from './base';
 class Driver extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'DRIVER', idField: 'driverId' });
+    const ownPatterns = { 'list-by-company': this.listByCompany };
+    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   async listByCompany(companyId) {

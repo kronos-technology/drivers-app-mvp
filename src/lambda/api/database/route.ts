@@ -7,6 +7,11 @@ class Route extends BaseEntity {
     super({ tableName, modelName: 'ROUTE', idField: 'routeId' });
     this.routeInCheckpointModel =
       this.table.getModel<EntityModel>('ROUTEINCHECKPOINT');
+    const ownPatterns = {
+      'list-by-origin': this.listByOrigin,
+      'list-by-destinatin': this.listByDestination
+    };
+    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   async listByOrigin(origin: string) {

@@ -6,6 +6,12 @@ class Checkpoint extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'CHECKPOINT', idField: 'checkpointId' });
     this.routeModel = this.table.getModel<EntityModel>('ROUTEINCHECKPOINT');
+    const ownPatterns = {
+      'assign-route': this.assignRoute,
+      'unassign-route': this.unassignRoute,
+      'get-assigned-routes': this.getAssignedRoutes
+    };
+    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   async assignRoute(checkpointId: string, routeId: string) {

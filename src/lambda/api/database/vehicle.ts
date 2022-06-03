@@ -3,6 +3,8 @@ import BaseEntity from './base';
 class Vehicle extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'VEHICLE', idField: 'plate' });
+    const ownPatterns = { 'list-by-company': this.listByCompany };
+    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   async listByCompany(companyId) {

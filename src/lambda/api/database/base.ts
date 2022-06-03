@@ -10,11 +10,12 @@ const tableName = 'DriversAppMvpStack-DbTableED196C5F-2JLYN2IVIIPA';
 //const tableName = process.env.DB_TABLE;
 
 class BaseEntity {
-  protected schema: typeof Schema = Schema;
+  protected schema = Schema;
   protected table: Table;
   protected model: Model<EntityModel>;
   protected _entity: string;
   public idField: string;
+  public accessPatterns: object;
 
   constructor(params) {
     if (!params.tableName) {
@@ -31,6 +32,13 @@ class BaseEntity {
     this._entity = params.modelName;
     this.model = this.table.getModel<EntityModel>(params.modelName);
     this.idField = params.idField;
+    this.accessPatterns = {
+      create: this.create,
+      list: this.list,
+      get: this.get,
+      update: this.update,
+      delete: this.delete
+    };
   }
 
   public get entity() {

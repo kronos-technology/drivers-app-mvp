@@ -1,4 +1,3 @@
-import { mainModule } from 'process';
 import { Checkin } from './checkin';
 import { Checkpoint } from './checkpoint';
 import { Company } from './company';
@@ -8,18 +7,20 @@ import { Vehicle } from './vehicle';
 
 class DbAdapter {
   separator: string = '-';
-  queryName: string;
+  fieldName: string;
+  args: object;
   entity: string;
   action: string;
   params: object;
   handlerEntity;
   handlerMethod;
 
-  constructor(queryName: string) {
-    const idx = queryName.indexOf(this.separator);
-    this.queryName = queryName;
-    this.entity = queryName.slice(0, idx);
-    this.action = queryName.slice(idx + 1);
+  constructor(fieldName: string, args: object) {
+    const idx = fieldName.indexOf(this.separator);
+    this.fieldName = fieldName;
+    this.args = args;
+    this.entity = fieldName.slice(0, idx);
+    this.action = fieldName.slice(idx + 1);
     this.handlerEntity = this.getEntity();
   }
 

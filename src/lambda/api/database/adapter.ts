@@ -36,10 +36,10 @@ class DbAdapter {
     return entityMap[this.entity];
   }
 
-  public handleRequest(params: object | undefined) {
+  public handleRequest() {
     this.handlerMethod = this.handlerEntity[this.action];
     console.log(`Handler method: ${this.entity}.${this.handlerMethod.name}`);
-    const result = this.handlerMethod(params);
+    const result = this.handlerMethod(this.args);
     console.log(`Result ${JSON.stringify(result, null, 2)}`);
     return result;
   }

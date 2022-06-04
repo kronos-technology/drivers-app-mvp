@@ -1,14 +1,24 @@
 // lib/cdk-products-stack.ts
-import * as cdk from '@aws-cdk/core';
-import * as cognito from '@aws-cdk/aws-cognito';
-import * as appsync from '@aws-cdk/aws-appsync';
-import * as ddb from '@aws-cdk/aws-dynamodb';
-import * as lambda from '@aws-cdk/aws-lambda';
+
+import {
+  Stack,
+  StackProps,
+  CfnOutput,
+  Expiration,
+  Duration
+} from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import {
+  aws_cognito as cognito,
+  aws_dynamodb as dynamodb,
+  aws_lambda as lambda
+} from 'aws-cdk-lib';
+import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import * as path from 'path';
 
 // lib/cdk-products-stack.ts
-export class DriversAppMvpStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class DriversAppMvpStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     const userPool = new cognito.UserPool(this, 'UserPool', {
@@ -42,7 +52,7 @@ export class DriversAppMvpStack extends cdk.Stack {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.API_KEY,
           apiKeyConfig: {
-            expires: cdk.Expiration.after(cdk.Duration.days(365))
+            expires: Expiration.after(Duration.days(365))
           }
         },
         additionalAuthorizationModes: [
@@ -99,10 +109,10 @@ export class DriversAppMvpStack extends cdk.Stack {
       fieldName: 'updateProduct'
     });
 
-    const dbTable = new ddb.Table(this, 'DbTable', {
-      billingMode: ddb.BillingMode.PAY_PER_REQUEST,
-      partitionKey: { name: 'pk', type: ddb.AttributeType.STRING },
-      sortKey: { name: 'sk', type: ddb.AttributeType.STRING },
+    const dbTable = new dynamodb.Table(this, 'DbTable', {
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      partitionKey: { name: 'pk', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'sk', type: dynamodb.AttributeType.STRING },
       timeToLiveAttribute: 'expire'
     });
 
@@ -111,11 +121,11 @@ export class DriversAppMvpStack extends cdk.Stack {
       indexName: 'gs1',
       partitionKey: {
         name: 'gs1pk',
-        type: ddb.AttributeType.STRING
+        type: dynamodb.AttributeType.STRING
       },
       sortKey: {
         name: 'gs1sk',
-        type: ddb.AttributeType.STRING
+        type: dynamodb.AttributeType.STRING
       }
     });
 
@@ -123,11 +133,11 @@ export class DriversAppMvpStack extends cdk.Stack {
       indexName: 'gs2',
       partitionKey: {
         name: 'gs2pk',
-        type: ddb.AttributeType.STRING
+        type: dynamodb.AttributeType.STRING
       },
       sortKey: {
         name: 'gs2sk',
-        type: ddb.AttributeType.STRING
+        type: dynamodb.AttributeType.STRING
       }
     });
 
@@ -137,23 +147,23 @@ export class DriversAppMvpStack extends cdk.Stack {
     // Create an environment variable that we will use in the function code
     appsyncHandlerLambda.addEnvironment('DB_TABLE', dbTable.tableName);
 
-    new cdk.CfnOutput(this, 'GraphQLAPIURL', {
+    new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl
     });
 
-    new cdk.CfnOutput(this, 'AppSyncAPIKey', {
+    new CfnOutput(this, 'AppSyncAPIKey', {
       value: api.apiKey || ''
     });
 
-    new cdk.CfnOutput(this, 'ProjectRegion', {
+    new CfnOutput(this, 'ProjectRegion', {
       value: this.region
     });
 
-    new cdk.CfnOutput(this, 'UserPoolId', {
+    new CfnOutput(this, 'UserPoolId', {
       value: userPool.userPoolId
     });
 
-    new cdk.CfnOutput(this, 'UserPoolClientId', {
+    new CfnOutput(this, 'UserPoolClientId', {
       value: userPoolClient.userPoolClientId
     });
   }

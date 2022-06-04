@@ -15,9 +15,9 @@ const actions = [
 describe.only('adapter tests', () => {
   test.only('instanciate object', async () => {
     for (const action of actions) {
-      const adapter = new DbAdapter(action);
+      const adapter = new DbAdapter(action, {});
       expect(adapter).toBeDefined();
-      expect(adapter.queryName).toEqual(action);
+      expect(adapter.fieldName).toEqual(action);
     }
   });
 });

@@ -1,16 +1,16 @@
-import {
-  Checkin,
-  Checkpoint,
-  Company,
-  Driver,
-  Route,
-  Vehicle
-} from './database/adapter';
+import { DbAdapter } from './database/adapter';
 
-export const handler = async (event) => {
-  console.log(`Event: ${JSON.stringify(event, null, 2)}`);
-  return {
-    statusCode: 200,
-    body: `You hit ${event.path}`
+type AppSyncEvent = {
+  info: {
+    fieldName: string;
   };
+  arguments: object;
+};
+
+export const handler = async (event: AppSyncEvent) => {
+  console.log(`Event: ${JSON.stringify(event, null, 2)}`);
+  const fieldName = event.info.fieldName;
+  const args = event.arguments;
+  const db = new DbAdapter(fieldName, args);
+  return db.handleRequest();
 };

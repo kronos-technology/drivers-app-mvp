@@ -1,33 +1,3 @@
-type Product @aws_api_key @aws_cognito_user_pools {
-  id: ID!
-  name: String!
-  description: String!
-  price: Float!
-  category: String!
-  sku: String
-  inventory: Int
-}
-
-input ProductInput {
-  id: ID
-  name: String!
-  description: String!
-  price: Float!
-  category: String!
-  sku: String
-  inventory: Int
-}
-
-input UpdateProductInput {
-  id: ID!
-  name: String
-  description: String
-  price: Float
-  category: String
-  sku: String
-  inventory: Int
-}
-
 type Driver @aws_api_key @aws_cognito_user_pools {
   id: String!
   driverId: String!
@@ -219,9 +189,6 @@ input RouteInCheckpointInput {
 }
 
 type Query {
-  getProductById(productId: ID!): Product @aws_api_key @aws_cognito_user_pools
-  listProducts: [Product] @aws_api_key @aws_cognito_user_pools
-  productsByCategory(category: String!): [Product] @aws_api_key @aws_cognito_user_pools
   # Driver
   getDriverById(driverId: String!): Driver @aws_api_key @aws_cognito_user_pools
   listDrivers: [Driver] @aws_api_key @aws_cognito_user_pools
@@ -250,24 +217,21 @@ type Query {
 }
 
 type Mutation {
-  createProduct(product: ProductInput!): Product
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
-  deleteProduct(productId: ID!): ID
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
-  updateProduct(product: UpdateProductInput!): Product
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  # Driver
   createDriver(driver: DriverInput!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteDriver(driverId: String!): ID
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   updateDriver(driver: UpdateProductInput!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  # Vehicle
   createVehicle(vehicle: VehicleInput!): Vehicle
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteVehicle(plate: String!): String
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   updateVehicle(driver: UpdateProductInput!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  # Company
   createCompany(company: CompanyInput!): Company
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteCompany(companyId: String!): String
@@ -277,12 +241,14 @@ type Mutation {
   assignRouteInCompany(routeInCompany: RouteInCompanyInput!): RouteInCompany
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   unassignRouteInCompany(routeInCompany: RouteInCompanyInput!): RouteInCompany
+  # Route
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   createRoute(route: RouteInput!): Route
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteRoute(routeId: String!): String
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   updateRoute(company: UpdateRouteInput!): Route
+  # Checkpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   createCheckpoint(checkpoint: CheckpointInput!): Checkpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
@@ -294,11 +260,11 @@ type Mutation {
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   unassignRouteInCheckpoint(routeInCheckpoint: RouteInCheckpointInput!): RouteInCheckpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
+  # Checkin
   createCheckin(checkin: CheckinInput!): Checkin
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
 }
 
 type Subscription {
-  onCreateProduct: Product @aws_subscribe(mutations: ["createProduct"])
   onCreateCheckin: Checkin @aws_subscribe(mutations: ["createCheckin"])
 }

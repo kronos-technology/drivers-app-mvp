@@ -53,10 +53,12 @@ const Schema = {
       sk: { type: String, value: 'company#' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       companyId: { type: String, required: true },
+      name: { type: String, required: true },
       phone: { type: String, required: true, validate: Match.phone },
-      address: { type: String, required: true, validate: Match.address },
       email: { type: String, validate: Match.email },
       city: { type: String, required: true },
+      address: { type: String, required: true, validate: Match.address },
+      nit: { type: String, required: true },
       // To search by city or type
       gs1pk: { type: String, value: 'company#' },
       gs1sk: { type: String, value: 'company#${city}' }
@@ -95,8 +97,8 @@ const Schema = {
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       checkpointId: { type: String, required: true },
       description: { type: String, required: true },
-      latitude: { type: String, default: ' ' },
-      longitude: { type: String, required: true },
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
       geohash: { type: String, required: true },
       // To search by geohash or type
       gs1pk: { type: String, value: 'checkpoint#' },

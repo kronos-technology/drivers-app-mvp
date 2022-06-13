@@ -15,9 +15,13 @@ import {
 } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import * as path from 'path';
+import { queries as ApiQueries } from './queries';
+import { mutations as ApiMutations } from './mutations';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
+  apiQueries: Array<string> = ApiQueries;
+  apiMutations: Array<string> = ApiMutations;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -83,6 +87,14 @@ export class DriversAppMvpStack extends Stack {
       'lambdaDatasource',
       appsyncHandlerLambda
     );
+
+    const queryResolvers = this.apiQueries.map((field) => {
+      lambdaDs.createResolver({ typeName: 'Query', fieldName: field });
+    });
+
+    const mutationResolvers = this.apiMutations.map((field) => {
+      lambdaDs.createResolver({ typeName: 'Mutation', fieldName: field });
+    });
 
     lambdaDs.createResolver({
       typeName: 'Query',

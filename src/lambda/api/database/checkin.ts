@@ -3,13 +3,6 @@ import BaseEntity, { EntityModel, Response } from './base';
 class Checkin extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'CHECKIN' });
-    const ownPatterns = {
-      create: this.create,
-      'get-history': this.getCheckinHistory,
-      'get-history-by-route': this.getCheckinHistoryByRoute,
-      'delete-history': this.deleteCheckinHistory
-    };
-    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   override async create(data: any): Promise<EntityModel | Response> {

@@ -6,12 +6,6 @@ class Company extends BaseEntity {
   constructor(tableName?: string) {
     super({ tableName, modelName: 'COMPANY', idField: 'companyId' });
     this.routeModel = this.table.getModel<EntityModel>('ROUTEINCOMPANY');
-    const ownPatterns = {
-      'assign-route': this.assignRoute,
-      'unassign-route': this.unassignRoute,
-      'get-assigned-routes': this.getAssignedRoutes
-    };
-    this.accessPatterns = { ...super.accessPatterns, ...ownPatterns };
   }
 
   async assignRoute(companyId: string, routeId: string) {

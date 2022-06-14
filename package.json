@@ -8,7 +8,8 @@
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "format": "prettier --config .prettierrc './**/*.ts' --write",
-    "build": "rimraf ./dist && tsc",
+    "build": "cdk synth && cdk diff",
+    "deploy": "yarn build && cdk deploy",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
@@ -22,6 +23,7 @@
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
     "babel-jest": "^28.0.3",
+    "esbuild": "^0.14.43",
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -37,10 +39,11 @@
     "constructs": "^10.1.26"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.27.0",
-    "constructs": "^10.1.26",
     "@aws-cdk/aws-appsync-alpha": "^2.27.0",
+    "@types/aws-lambda": "^8.10.100",
+    "aws-cdk-lib": "^2.27.0",
     "cdk-pipelines-github": "^0.2.60",
+    "constructs": "^10.1.26",
     "dynamodb-onetable": "^2.3.6",
     "source-map-support": "^0.5.16"
   },

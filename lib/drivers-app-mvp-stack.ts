@@ -8,11 +8,9 @@ import {
   Duration
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import {
-  aws_cognito as cognito,
-  aws_dynamodb as dynamodb,
-  aws_lambda as lambda
-} from 'aws-cdk-lib';
+import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import * as path from 'path';
 import { queries as ApiQueries } from './queries';
@@ -70,57 +68,6 @@ export class DriversAppMvpStack extends Stack {
       }
     });
 
-    // Create the function
-    const appsyncHandlerLambda = new lambda.Function(
-      this,
-      'ApiLambdaResolver',
-      {
-        runtime: lambda.Runtime.NODEJS_14_X,
-        handler: 'main.handler',
-        code: lambda.Code.fromAsset(path.join(__dirname, '../src/lambda/api')),
-        memorySize: 1024
-      }
-    );
-
-    // Set the new Lambda function as a data source for the AppSync API
-    const lambdaDs = api.addLambdaDataSource(
-      'lambdaDatasource',
-      appsyncHandlerLambda
-    );
-
-    const queryResolvers = this.apiQueries.map((field) => {
-      lambdaDs.createResolver({ typeName: 'Query', fieldName: field });
-    });
-
-    const mutationResolvers = this.apiMutations.map((field) => {
-      lambdaDs.createResolver({ typeName: 'Mutation', fieldName: field });
-    });
-
-    lambdaDs.createResolver({
-      typeName: 'Query',
-      fieldName: 'listProducts'
-    });
-
-    lambdaDs.createResolver({
-      typeName: 'Query',
-      fieldName: 'productsByCategory'
-    });
-
-    lambdaDs.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'createProduct'
-    });
-
-    lambdaDs.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'deleteProduct'
-    });
-
-    lambdaDs.createResolver({
-      typeName: 'Mutation',
-      fieldName: 'updateProduct'
-    });
-
     const dbTable = new dynamodb.Table(this, 'DbTable', {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       partitionKey: { name: 'pk', type: dynamodb.AttributeType.STRING },
@@ -153,11 +100,32 @@ export class DriversAppMvpStack extends Stack {
       }
     });
 
+    // Create the function
+    const appsyncHandlerLambda = new NodejsFunction(this, 'ApiLambdaResolver', {
+      runtime: Runtime.NODEJS_16_X,
+      handler: 'handler',
+      entry: path.join(__dirname, '../src/lambda/api/main.ts'),
+      environment: {
+        TABLE_NAME: dbTable.tableName
+      }
+    });
+
+    // Set the new Lambda function as a data source for the AppSync API
+    const lambdaDs = api.addLambdaDataSource(
+      'lambdaDatasource',
+      appsyncHandlerLambda
+    );
+
+    const queryResolvers = this.apiQueries.map((field) => {
+      lambdaDs.createResolver({ typeName: 'Query', fieldName: field });
+    });
+
+    const mutationResolvers = this.apiMutations.map((field) => {
+      lambdaDs.createResolver({ typeName: 'Mutation', fieldName: field });
+    });
+
     // Enable the Lambda function to access the DynamoDB table (using IAM)
     dbTable.grantFullAccess(appsyncHandlerLambda);
-
-    // Create an environment variable that we will use in the function code
-    appsyncHandlerLambda.addEnvironment('DB_TABLE', dbTable.tableName);
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

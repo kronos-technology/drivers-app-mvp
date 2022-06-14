@@ -222,14 +222,14 @@ type Mutation {
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteDriver(driverId: String!): ID
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
-  updateDriver(driver: UpdateProductInput!): Driver
+  updateDriver(driver: UpdateDriverInput!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   # Vehicle
   createVehicle(vehicle: VehicleInput!): Vehicle
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   deleteVehicle(plate: String!): String
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
-  updateVehicle(driver: UpdateProductInput!): Driver
+  updateVehicle(driver: UpdateVehicleInput!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"])
   # Company
   createCompany(company: CompanyInput!): Company

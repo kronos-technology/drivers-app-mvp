@@ -64,8 +64,8 @@ class DbAdapter {
       createCheckin: new Checkin().create
     };
 
-    const resolver: Function = resolversMap[fieldName];
-    console.log(`Handler method: ${resolver.name}`);
+    const resolver: Function = resolversMap[fieldName].name;
+    console.log(`Handler method: ${resolver}`);
 
     return resolver;
   }

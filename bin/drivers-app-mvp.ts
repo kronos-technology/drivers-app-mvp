@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
 import { App } from 'aws-cdk-lib';
 import { DriversAppMvpStack } from '../lib/drivers-app-mvp-stack';
 

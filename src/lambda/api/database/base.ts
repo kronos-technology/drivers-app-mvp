@@ -17,7 +17,6 @@ class BaseEntity {
   public idField: string;
 
   constructor(params) {
-    console.log(`Params passed to base: ${params}`);
     if (!params.tableName) {
       params.tableName = tableName;
     }
@@ -96,7 +95,7 @@ class BaseEntity {
     }
   }
 
-  async delete(id): Promise<EntityModel | undefined> {
+  async delete(id: string): Promise<EntityModel | undefined> {
     console.log(`Deleting ${this.entity} with id ${id}`);
     let idObject = {};
     idObject[this.idField] = id;

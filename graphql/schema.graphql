@@ -219,50 +219,51 @@ type Query {
 type Mutation {
   # Driver
   createDriver(driver: DriverInput!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+
   deleteDriver(driverId: String!): ID
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   updateDriver(driver: UpdateDriverInput!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Vehicle
   createVehicle(vehicle: VehicleInput!): Vehicle
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteVehicle(plate: String!): String
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   updateVehicle(driver: UpdateVehicleInput!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Company
   createCompany(company: CompanyInput!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteCompany(companyId: String!): String
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   updateCompany(company: UpdateCompanyInput!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   assignRouteInCompany(routeInCompany: RouteInCompanyInput!): RouteInCompany
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   unassignRouteInCompany(routeInCompany: RouteInCompanyInput!): RouteInCompany
   # Route
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   createRoute(route: RouteInput!): Route
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteRoute(routeId: String!): String
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   updateRoute(company: UpdateRouteInput!): Route
   # Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   createCheckpoint(checkpoint: CheckpointInput!): Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteCheckpoint(checkpointId: String!): String
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   updateCheckpoint(checkpoint: UpdateCheckpointInput!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   assignRouteInCheckpoint(routeInCheckpoint: RouteInCheckpointInput!): RouteInCheckpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   unassignRouteInCheckpoint(routeInCheckpoint: RouteInCheckpointInput!): RouteInCheckpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Checkin
   createCheckin(checkin: CheckinInput!): Checkin
-    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
 }
 
 type Subscription {

@@ -12,5 +12,5 @@ export const handler = async (event: AppSyncEvent) => {
   const fieldName = event.info.fieldName;
   const args = event.arguments;
   const db = new DbAdapter(fieldName, args);
-  return db.handleRequest();
+  return await db.handleRequest();
 };

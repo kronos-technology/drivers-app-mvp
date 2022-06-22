@@ -14,64 +14,61 @@ class DbAdapter {
   constructor(fieldName: string, args: object) {
     this.fieldName = fieldName;
     this.args = args;
-    this.resolver = this.getFieldResolver(fieldName);
   }
 
-  private getFieldResolver(fieldName: string) {
-    const resolversMap: object = {
+  private getResolver() {
+    const resolvers = {
       // Driver
-      getDriverById: new Driver().get,
-      listDrivers: new Driver().list,
-      driversByCompany: new Driver().listByCompany,
-      createDriver: new Driver().create,
-      updateDriver: new Driver().update,
-      deleteDriver: new Driver().delete,
+      getDriverById: [Driver, 'get', ''],
+      listDrivers: [Driver, 'list'],
+      driversByCompany: [Driver, 'listByCompany'],
+      createDriver: [Driver, 'create', 'driver'],
+      updateDriver: [Driver, 'update'],
+      deleteDriver: [Driver, 'delete'],
       // Vehicle
-      getVehicleByPlate: new Vehicle().get,
-      listVehicles: new Vehicle().list,
-      vehiclesByCompany: new Vehicle().listByCompany,
-      createVehicle: new Vehicle().create,
-      updateVehicle: new Vehicle().update,
-      deleteVehicle: new Vehicle().delete,
+      getVehicleByPlate: [Vehicle, 'get'],
+      listVehicles: [Vehicle, 'list'],
+      vehiclesByCompany: [Vehicle, 'listByCompany'],
+      createVehicle: [Vehicle, 'create'],
+      updateVehicle: [Vehicle, 'update'],
+      deleteVehicle: [Vehicle, 'delete'],
       // Company
-      getCompanyById: new Company().get,
-      listCompanies: new Company().list,
-      routesInCompany: new Company().getAssignedRoutes,
-      createCompany: new Company().create,
-      updateCompany: new Company().update,
-      deleteCompany: new Company().delete,
+      getCompanyById: [Company, 'get'],
+      listCompanies: [Company, 'list'],
+      routesInCompany: [Company, 'getAssignedRoutes'],
+      createCompany: [Company, 'create'],
+      updateCompany: [Company, 'update'],
+      deleteCompany: [Company, 'delete'],
       // Route
-      getRouteById: new Route().get,
-      listRoutes: new Route().list,
-      routesByOrigin: new Route().listByOrigin,
-      routesByDestination: new Route().listByDestination,
-      createRoute: new Route().create,
-      updateRoute: new Route().update,
-      deleteRoute: new Route().delete,
+      getRouteById: [Route, 'get'],
+      listRoutes: [Route, 'list'],
+      routesByOrigin: [Route, 'listByOrigin'],
+      routesByDestination: [Route, 'listByDestination'],
+      createRoute: [Route, 'create'],
+      updateRoute: [Route, 'update'],
+      deleteRoute: [Route, 'delete'],
       // Checkpoint
-      getChekpointById: new Checkpoint().get,
-      listCheckpoints: new Checkpoint().list,
-      routesInCheckpoint: new Checkpoint().getAssignedRoutes,
-      createCheckpoint: new Checkpoint().create,
-      updateCheckpoint: new Checkpoint().update,
-      deleteCheckpoint: new Checkpoint().delete,
-      assignRouteInCheckpoint: new Checkpoint().assignRoute,
-      unassignRouteInCheckpoint: new Checkpoint().unassignRoute,
+      getChekpointById: [Checkpoint, 'get'],
+      listCheckpoints: [Checkpoint, 'list'],
+      routesInCheckpoint: [Checkpoint, 'getAssignedRoutes'],
+      createCheckpoint: [Checkpoint, 'create'],
+      updateCheckpoint: [Checkpoint, 'update'],
+      deleteCheckpoint: [Checkpoint, 'delete'],
+      assignRouteInCheckpoint: [Checkpoint, 'assignRoute'],
+      unassignRouteInCheckpoint: [Checkpoint, 'unassignRoute'],
       // Checkin
-      getCheckinById: new Checkin().get,
-      checkinHistory: new Checkin().getCheckinHistory,
-      checkinHistoryByRoute: new Checkin().getCheckinHistoryByRoute,
-      createCheckin: new Checkin().create
+      getCheckinById: [Checkin, 'get'],
+      checkinHistory: [Checkin, 'getCheckinHistory'],
+      checkinHistoryByRoute: [Checkin, 'getCheckinHistoryByRoute'],
+      createCheckin: [Checkin, 'create']
     };
-
-    const resolver: Function = resolversMap[fieldName].name;
-    console.log(`Handler method: ${resolver}`);
-
-    return resolver;
+    return resolvers[this.fieldName];
   }
-
-  public handleRequest() {
-    const result = this.resolver(this.args);
+  public async handleRequest() {
+    const [itemClass, methodName, keyName] = this.getResolver();
+    console.log(`Class: ${itemClass.name}. Method: ${methodName.name}`);
+    const handler = new itemClass();
+    const result = await handler[methodName](this.args[keyName]);
     console.log(`Result ${JSON.stringify(result, null, 2)}`);
     return result;
   }

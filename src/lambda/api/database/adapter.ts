@@ -19,58 +19,69 @@ class DbAdapter {
   private getResolver() {
     const resolvers = {
       // Driver
-      getDriverById: [Driver, 'get', ''],
-      listDrivers: [Driver, 'list'],
-      driversByCompany: [Driver, 'listByCompany'],
-      createDriver: [Driver, 'create', 'driver'],
-      updateDriver: [Driver, 'update'],
-      deleteDriver: [Driver, 'delete'],
+      getDriverById: [Driver, 'get', 'driverId'],
+      listDrivers: [Driver, 'list', null],
+      driversByCompany: [Driver, 'listByCompany', 'companyId'],
+      createDriver: [Driver, 'create', 'driverInfo'],
+      updateDriver: [Driver, 'update', 'driverUpdate'],
+      deleteDriver: [Driver, 'delete', 'driverId'],
       // Vehicle
-      getVehicleByPlate: [Vehicle, 'get'],
-      listVehicles: [Vehicle, 'list'],
-      vehiclesByCompany: [Vehicle, 'listByCompany'],
-      createVehicle: [Vehicle, 'create'],
-      updateVehicle: [Vehicle, 'update'],
-      deleteVehicle: [Vehicle, 'delete'],
+      getVehicleByPlate: [Vehicle, 'get', 'plate'],
+      listVehicles: [Vehicle, 'list', null],
+      vehiclesByCompany: [Vehicle, 'listByCompany', 'companyId'],
+      createVehicle: [Vehicle, 'create', 'vehicleInfo'],
+      updateVehicle: [Vehicle, 'update', 'vehicleUpdate'],
+      deleteVehicle: [Vehicle, 'delete', 'plate'],
       // Company
-      getCompanyById: [Company, 'get'],
-      listCompanies: [Company, 'list'],
-      routesInCompany: [Company, 'getAssignedRoutes'],
-      createCompany: [Company, 'create'],
-      updateCompany: [Company, 'update'],
-      deleteCompany: [Company, 'delete'],
+      getCompanyById: [Company, 'get', 'companyId'],
+      listCompanies: [Company, 'list', null],
+      routesInCompany: [Company, 'getAssignedRoutes', 'routeInCompany'],
+      createCompany: [Company, 'create', 'companyInfo'],
+      updateCompany: [Company, 'update', 'companyUpdate'],
+      deleteCompany: [Company, 'delete', 'companyId'],
+      assignRouteInCompany: [Company, 'assignRoute', 'routeInCompany'],
+      unassignRouteIncompany: [Company, 'unassignRoute', 'companyId'],
       // Route
-      getRouteById: [Route, 'get'],
-      listRoutes: [Route, 'list'],
-      routesByOrigin: [Route, 'listByOrigin'],
-      routesByDestination: [Route, 'listByDestination'],
-      createRoute: [Route, 'create'],
-      updateRoute: [Route, 'update'],
-      deleteRoute: [Route, 'delete'],
+      getRouteById: [Route, 'get', 'routeId'],
+      listRoutes: [Route, 'list', null],
+      routesByOrigin: [Route, 'listByOrigin', 'origin'],
+      routesByDestination: [Route, 'listByDestination', 'destination'],
+      createRoute: [Route, 'create', 'routeInfo'],
+      updateRoute: [Route, 'update', 'routeUpdate'],
+      deleteRoute: [Route, 'delete', 'routeId'],
       // Checkpoint
-      getChekpointById: [Checkpoint, 'get'],
-      listCheckpoints: [Checkpoint, 'list'],
-      routesInCheckpoint: [Checkpoint, 'getAssignedRoutes'],
-      createCheckpoint: [Checkpoint, 'create'],
-      updateCheckpoint: [Checkpoint, 'update'],
-      deleteCheckpoint: [Checkpoint, 'delete'],
-      assignRouteInCheckpoint: [Checkpoint, 'assignRoute'],
-      unassignRouteInCheckpoint: [Checkpoint, 'unassignRoute'],
+      getChekpointById: [Checkpoint, 'get', 'checkpointId'],
+      listCheckpoints: [Checkpoint, 'list', null],
+      routesInCheckpoint: [Checkpoint, 'getAssignedRoutes', 'checkpointId'],
+      createCheckpoint: [Checkpoint, 'create', 'checkpointInfo'],
+      updateCheckpoint: [Checkpoint, 'update', 'checkpointUpdate'],
+      deleteCheckpoint: [Checkpoint, 'delete', 'checkpointId'],
+      assignRouteInCheckpoint: [Checkpoint, 'assignRoute', 'routeInCheckpoint'],
+      unassignRouteInCheckpoint: [
+        Checkpoint,
+        'unassignRoute',
+        'routeInCheckpoint'
+      ],
       // Checkin
-      getCheckinById: [Checkin, 'get'],
-      checkinHistory: [Checkin, 'getCheckinHistory'],
-      checkinHistoryByRoute: [Checkin, 'getCheckinHistoryByRoute'],
-      createCheckin: [Checkin, 'create']
+      getCheckinById: [Checkin, 'get', 'checkinId'],
+      checkinHistory: [Checkin, 'getCheckinHistory', 'checkpointId'],
+      checkinHistoryByRoute: [
+        Checkin,
+        'getCheckinHistoryByRoute',
+        'routeInCheckpoint'
+      ],
+      createCheckin: [Checkin, 'create', 'checkinInfo']
     };
     return resolvers[this.fieldName];
   }
+
   public async handleRequest() {
     const [itemClass, methodName, keyName] = this.getResolver();
     console.log(`Class: ${itemClass.name}. Method: ${methodName.name}`);
     const handler = new itemClass();
-    const result = await handler[methodName](this.args[keyName]);
-    console.log(`Result ${JSON.stringify(result, null, 2)}`);
-    return result;
+    const response = await handler[methodName](this.args[keyName]);
+    console.log(`Response: ${JSON.stringify(response, null, 2)}`);
+    return response;
   }
 }
 

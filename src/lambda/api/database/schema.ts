@@ -28,7 +28,7 @@ const Schema = {
       name: { type: String, required: true },
       lastName: { type: String, required: true },
       companyId: { type: String, required: true },
-      birthdate: { type: Date, required: false },
+      birthdate: { type: String, required: false },
       phone: { type: String, required: true, validate: Match.phone },
       // To search by company or type
       gs1pk: { type: String, value: 'driver#' },
@@ -42,7 +42,7 @@ const Schema = {
       status: { type: String, default: 'idle' },
       number: { type: String, required: true },
       companyId: { type: String, required: true },
-      lastMaintenance: { type: Date, required: false },
+      lastMaintenance: { type: String, required: false },
       currentDriverId: { type: String, default: 'no_driver' },
       // To search by company or type
       gs1pk: { type: String, value: 'vehicle#' },

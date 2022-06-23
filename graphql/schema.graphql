@@ -4,7 +4,7 @@ type Driver @aws_api_key @aws_cognito_user_pools {
   name: String!
   lastName: String!
   companyId: String!
-  birthdate: AWSDate!
+  birthdate: String!
   phone: AWSPhone!
 }
 
@@ -13,7 +13,7 @@ input DriverInfo {
   name: String!
   lastName: String!
   companyId: String!
-  birthdate: AWSDate!
+  birthdate: String!
   phone: AWSPhone!
 }
 
@@ -22,7 +22,7 @@ input DriverUpdate {
   name: String
   lastName: String
   companyId: String
-  birthdate: AWSDate
+  birthdate: String
   phone: AWSPhone
 }
 

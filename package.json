@@ -9,7 +9,7 @@
     "lint-and-fix": "eslint . --ext .ts --fix",
     "format": "prettier --config .prettierrc './**/*.ts' --write",
     "build": "cdk synth && cdk diff",
-    "deploy": "yarn build && cdk deploy",
+    "deploy": "yarn build && cdk deploy --require-approval never",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"

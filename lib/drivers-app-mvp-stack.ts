@@ -139,7 +139,7 @@ export class DriversAppMvpStack extends Stack {
       {
         runtime: Runtime.NODEJS_16_X,
         handler: 'handler',
-        entry: path.join(__dirname, '../src/lambda/checkin-recorder/main.ts'),
+        entry: path.join(__dirname, '../src/lambda/checkin-retriever/main.ts'),
         environment: {
           TABLE_NAME: dbTable.tableName
         }

@@ -8,9 +8,12 @@ import {
   Duration
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
+import {
+  aws_cognito as cognito,
+  aws_dynamodb as dynamodb,
+  aws_lambda_nodejs as lambda
+} from 'aws-cdk-lib';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import * as path from 'path';
 import { queries as ApiQueries } from './queries';
@@ -100,15 +103,19 @@ export class DriversAppMvpStack extends Stack {
       }
     });
 
-    // Create the function
-    const appsyncHandlerLambda = new NodejsFunction(this, 'ApiLambdaResolver', {
-      runtime: Runtime.NODEJS_16_X,
-      handler: 'handler',
-      entry: path.join(__dirname, '../src/lambda/api/main.ts'),
-      environment: {
-        TABLE_NAME: dbTable.tableName
+    // Create the function for handling CRUD Operations
+    const appsyncHandlerLambda = new lambda.NodejsFunction(
+      this,
+      'ApiLambdaResolver',
+      {
+        runtime: Runtime.NODEJS_16_X,
+        handler: 'handler',
+        entry: path.join(__dirname, '../src/lambda/api/main.ts'),
+        environment: {
+          TABLE_NAME: dbTable.tableName
+        }
       }
-    });
+    );
 
     // Set the new Lambda function as a data source for the AppSync API
     const lambdaDs = api.addLambdaDataSource(
@@ -126,6 +133,22 @@ export class DriversAppMvpStack extends Stack {
 
     // Enable the Lambda function to access the DynamoDB table (using IAM)
     dbTable.grantFullAccess(appsyncHandlerLambda);
+
+    // Create the function to process checkin requests
+    const checkinRecorderLambda = new lambda.NodejsFunction(
+      this,
+      'CheckinRecorder',
+      {
+        runtime: Runtime.NODEJS_16_X,
+        handler: 'handler',
+        entry: path.join(__dirname, '../src/lambda/checkin-recorder/main.ts'),
+        environment: {
+          TABLE_NAME: dbTable.tableName
+        }
+      }
+    );
+    // Enable the Lambda function to access the DynamoDB table (using IAM)
+    dbTable.grantFullAccess(checkinRecorderLambda);
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

@@ -7,7 +7,7 @@ type AppSyncEvent = {
   arguments: { checkinInfo: CheckinType };
 };
 
-class CheckinProcessor {
+class CheckinRecorder {
   checkinData: CheckinType;
   constructor(data: CheckinType) {
     this.checkinData = data;
@@ -25,8 +25,8 @@ class CheckinProcessor {
 export const handler = async (event: AppSyncEvent) => {
   console.log(`Event: ${JSON.stringify(event, null, 2)}`);
   const data = event.arguments.checkinInfo;
-  const processor = new CheckinProcessor(data);
-  const response = await processor.processCheckin();
+  const recorder = new CheckinRecorder(data);
+  const response = await recorder.processCheckin();
   console.log(`Response: ${JSON.stringify(response, null, 2)}`);
   return response;
 };

@@ -178,7 +178,7 @@ export class DriversAppMvpStack extends Stack {
     const recorderStateMachine = new sfn.StateMachine(this, 'StateMachine', {
       definition,
       stateMachineType: sfn.StateMachineType.EXPRESS,
-      timeout: Duration.minutes(1)
+      timeout: Duration.seconds(30)
     });
 
     new CfnOutput(this, 'GraphQLAPIURL', {

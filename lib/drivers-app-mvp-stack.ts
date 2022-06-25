@@ -13,12 +13,13 @@ import {
   aws_dynamodb as dynamodb,
   aws_lambda_nodejs as lambda
 } from 'aws-cdk-lib';
+import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
+import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
 import * as path from 'path';
 import { queries as ApiQueries } from './queries';
 import { mutations as ApiMutations } from './mutations';
-
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
   apiQueries: Array<string> = ApiQueries;
@@ -104,18 +105,15 @@ export class DriversAppMvpStack extends Stack {
     });
 
     // Create the function for handling CRUD Operations
-    const appsyncHandlerLambda = new lambda.NodejsFunction(
-      this,
-      'ApiLambdaResolver',
-      {
+    const appsyncHandlerLambda: lambda.NodejsFunction =
+      new lambda.NodejsFunction(this, 'ApiLambdaResolver', {
         runtime: Runtime.NODEJS_16_X,
         handler: 'handler',
         entry: path.join(__dirname, '../src/lambda/api/main.ts'),
         environment: {
           TABLE_NAME: dbTable.tableName
         }
-      }
-    );
+      });
 
     // Set the new Lambda function as a data source for the AppSync API
     const lambdaDs = api.addLambdaDataSource(
@@ -135,9 +133,9 @@ export class DriversAppMvpStack extends Stack {
     dbTable.grantFullAccess(appsyncHandlerLambda);
 
     // Create the function to process checkin requests
-    const checkinRecorderLambda = new lambda.NodejsFunction(
+    const getTimeDifference: lambda.NodejsFunction = new lambda.NodejsFunction(
       this,
-      'CheckinRecorder',
+      'GetTimeDifference',
       {
         runtime: Runtime.NODEJS_16_X,
         handler: 'handler',
@@ -148,7 +146,40 @@ export class DriversAppMvpStack extends Stack {
       }
     );
     // Enable the Lambda function to access the DynamoDB table (using IAM)
-    dbTable.grantFullAccess(checkinRecorderLambda);
+    dbTable.grantFullAccess(getTimeDifference);
+
+    // Tasks to compose the express workflow state machine to process new checkins
+    const storeCheckinStep = new tasks.DynamoPutItem(this, 'Store Checkin', {
+      item: {
+        MessageId: tasks.DynamoAttributeValue.fromString('message-007'),
+        Text: tasks.DynamoAttributeValue.fromString(
+          sfn.JsonPath.stringAt('$.bar')
+        ),
+        TotalCount: tasks.DynamoAttributeValue.fromNumber(10)
+      },
+      table: dbTable
+    });
+    const getTimeDifferenceStep = new tasks.LambdaInvoke(
+      this,
+      'Get Time Difference',
+      {
+        lambdaFunction: getTimeDifference,
+        // Lambda's result is in the attribute `Payload`
+        outputPath: '$.Payload'
+      }
+    );
+
+    const parallel = new sfn.Parallel(this, 'All jobs')
+      .branch(storeCheckinStep)
+      .branch(getTimeDifferenceStep);
+
+    const definition = parallel;
+
+    const recorderStateMachine = new sfn.StateMachine(this, 'StateMachine', {
+      definition,
+      stateMachineType: sfn.StateMachineType.EXPRESS,
+      timeout: Duration.minutes(1)
+    });
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

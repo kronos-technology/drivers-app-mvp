@@ -142,4 +142,5 @@ export type CheckinType = {
   timestamp: string;
   plate: string;
   driverId: string;
+  timeDifference?: string;
 };

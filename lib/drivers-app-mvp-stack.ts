@@ -17,9 +17,47 @@ import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
+import { Role, ServicePrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import * as path from 'path';
 import { queries as ApiQueries } from './queries';
 import { mutations as ApiMutations } from './mutations';
+
+const START_EXECUTION_REQUEST_TEMPLATE = (stateMachineArn: String) => {
+  return `
+  {
+    "version": "2018-05-29",
+    "method": "POST",
+    "resourcePath": "/",
+    "params": {
+      "headers": {
+        "content-type": "application/x-amz-json-1.0",
+        "x-amz-target":"AWSStepFunctions.StartSyncExecution"
+      },
+      "body": {
+        "stateMachineArn": "${stateMachineArn}",
+        "name" : "$context.args.execution.name",
+        "input": "{ \\\"input\\\": \\\"$context.args.execution.input\\\"}"
+      }
+    }
+  }
+`;
+};
+
+const RESPONSE_TEMPLATE = `
+## Raise a GraphQL field error in case of a datasource invocation error
+#if($ctx.error)
+  $util.error($ctx.error.message, $ctx.error.type)
+#end
+## if the response status code is not 200, then return an error. Else return the body **
+#if($ctx.result.statusCode == 200)
+    ## If response is 200, return the body.
+  $ctx.result.body
+#else
+    ## If response is not 200, append the response to error block.
+    $utils.appendError($ctx.result.body, $ctx.result.statusCode)
+#end
+`;
+
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
   apiQueries: Array<string> = ApiQueries;
@@ -71,6 +109,28 @@ export class DriversAppMvpStack extends Stack {
         ]
       }
     });
+
+    const appsyncStepFunctionsRole = new Role(this, 'SyncStateMachineRole', {
+      assumedBy: new ServicePrincipal('appsync.amazonaws.com')
+    });
+    appsyncStepFunctionsRole.addToPolicy(
+      new PolicyStatement({
+        resources: ['*'],
+        actions: ['states:StartSyncExecution']
+      })
+    );
+
+    const endpoint = 'https://sync-states.' + this.region + '.amazonaws.com/';
+    const httpdatasource = api.addHttpDataSource(
+      'StepFunctionsStateMachine',
+      endpoint,
+      {
+        authorizationConfig: {
+          signingRegion: this.region,
+          signingServiceName: 'states'
+        }
+      }
+    );
 
     const dbTable = new dynamodb.Table(this, 'DbTable', {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -131,55 +191,6 @@ export class DriversAppMvpStack extends Stack {
 
     // Enable the Lambda function to access the DynamoDB table (using IAM)
     dbTable.grantFullAccess(appsyncHandlerLambda);
-
-    // Create the function to process checkin requests
-    const getTimeDifference: lambda.NodejsFunction = new lambda.NodejsFunction(
-      this,
-      'GetTimeDifference',
-      {
-        runtime: Runtime.NODEJS_16_X,
-        handler: 'handler',
-        entry: path.join(__dirname, '../src/lambda/checkin-retriever/main.ts'),
-        environment: {
-          TABLE_NAME: dbTable.tableName
-        }
-      }
-    );
-    // Enable the Lambda function to access the DynamoDB table (using IAM)
-    dbTable.grantFullAccess(getTimeDifference);
-
-    // Tasks to compose the express workflow state machine to process new checkins
-    const storeCheckinStep = new tasks.DynamoPutItem(this, 'Store Checkin', {
-      item: {
-        MessageId: tasks.DynamoAttributeValue.fromString('message-007'),
-        Text: tasks.DynamoAttributeValue.fromString(
-          sfn.JsonPath.stringAt('$.bar')
-        ),
-        TotalCount: tasks.DynamoAttributeValue.fromNumber(10)
-      },
-      table: dbTable
-    });
-    const getTimeDifferenceStep = new tasks.LambdaInvoke(
-      this,
-      'Get Time Difference',
-      {
-        lambdaFunction: getTimeDifference,
-        // Lambda's result is in the attribute `Payload`
-        outputPath: '$.Payload'
-      }
-    );
-
-    const parallel = new sfn.Parallel(this, 'All jobs')
-      .branch(storeCheckinStep)
-      .branch(getTimeDifferenceStep);
-
-    const definition = parallel;
-
-    const recorderStateMachine = new sfn.StateMachine(this, 'StateMachine', {
-      definition,
-      stateMachineType: sfn.StateMachineType.EXPRESS,
-      timeout: Duration.seconds(30)
-    });
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

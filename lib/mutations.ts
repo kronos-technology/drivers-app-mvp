@@ -20,7 +20,6 @@ const mutations = vehicleMutations.concat(
   driverMutations,
   companyMutations,
   routeMutations,
-  checkpointMutations,
-  checkinMutations
+  checkpointMutations
 );
 export { mutations };

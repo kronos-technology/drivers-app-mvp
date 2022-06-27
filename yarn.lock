@@ -11,9 +11,9 @@
     "@jridgewell/trace-mapping" "^0.3.9"
 
 "@aws-cdk/aws-appsync-alpha@^2.27.0":
-  version "2.27.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-appsync-alpha/-/aws-appsync-alpha-2.27.0-alpha.0.tgz#78e9d82f33a32bb2a36bdf2633619d34f819af7f"
-  integrity sha512-z7JNdK1BUGbe70KaDa2Hu69uIn3FG9GUJZ+mKyL0HW7r4PAtdmXSPKVumRa5niR/x6eaxtWvcAXaADNEYht4VQ==
+  version "2.29.1-alpha.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-appsync-alpha/-/aws-appsync-alpha-2.29.1-alpha.0.tgz#34d4336fc3406bbcd1f567bb1fe1af5a746f1f5d"
+  integrity sha512-qevXyzQl44279ma3MBKZiH0AXayBhzplf1arLqR/IeK2Q8GoLTO7sf0gwuvQLKsR6K4ziv4jsXcqa4nTI/FCbA==
 
 "@aws-crypto/ie11-detection@^2.0.0":
   version "2.0.0"
@@ -2269,6 +2269,11 @@ anymatch@^3.0.3:
   dependencies:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
+
+app-root-path@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-3.0.0.tgz#210b6f43873227e18a4b810a032283311555d5ad"
+  integrity sha512-qMcx+Gy2UZynHjOHOIXPNvpf+9cjvk3cWrBBK7zg4gH9+clobJRb9NGzcT7mQTcV/6Gm/1WelUtqxVXnNlrwcw==
 
 arg@^4.1.0:
   version "4.1.3"

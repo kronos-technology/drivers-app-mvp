@@ -1,0 +1,16 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "PutItem",
+    "key": {
+        "pk" : $util.dynamodb.toDynamoDBJson($ctx.args.pk),
+        "sk" : $util.dynamodb.toDynamoDBJson($ctx.args.sk)
+    },
+    "attributeValues" : {
+        "checkpointId"    : $util.dynamodb.toDynamoDBJson($ctx.args.checkpointId),
+        "routeId" : $util.dynamodb.toDynamoDBJson($ctx.args.checkpointId),
+        "timestamp": $util.dynamodb.toDynamoDBJson($ctx.args.timestamp),
+        "plate": $util.dynamodb.toDynamoDBJson($ctx.args.plate),
+        "driverId": $util.dynamodb.toDynamoDBJson($ctx.args.driverId),
+        "expire": $util.dynamodb.toDynamoDBJson($ctx.args.expire),
+    }
+}

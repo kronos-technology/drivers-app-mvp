@@ -158,7 +158,7 @@ type Checkin @aws_api_key @aws_cognito_user_pools {
 }
 
 input CheckinInfo {
-  id: String!
+  id: ID!
   checkpointId: String!
   routeId: String!
   timestamp: AWSDateTime!

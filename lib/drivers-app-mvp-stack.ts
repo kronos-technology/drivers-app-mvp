@@ -22,41 +22,11 @@ import * as path from 'path';
 import { queries as ApiQueries } from './queries';
 import { mutations as ApiMutations } from './mutations';
 
-const START_EXECUTION_REQUEST_TEMPLATE = (stateMachineArn: String) => {
-  return `
-  {
-    "version": "2018-05-29",
-    "method": "POST",
-    "resourcePath": "/",
-    "params": {
-      "headers": {
-        "content-type": "application/x-amz-json-1.0",
-        "x-amz-target":"AWSStepFunctions.StartSyncExecution"
-      },
-      "body": {
-        "stateMachineArn": "${stateMachineArn}",
-        "name" : "$context.args.execution.name",
-        "input": "{ \\\"input\\\": \\\"$context.args.execution.input\\\"}"
-      }
-    }
-  }
-`;
-};
-
-const RESPONSE_TEMPLATE = `
-## Raise a GraphQL field error in case of a datasource invocation error
-#if($ctx.error)
-  $util.error($ctx.error.message, $ctx.error.type)
-#end
-## if the response status code is not 200, then return an error. Else return the body **
-#if($ctx.result.statusCode == 200)
-    ## If response is 200, return the body.
-  $ctx.result.body
-#else
-    ## If response is not 200, append the response to error block.
-    $utils.appendError($ctx.result.body, $ctx.result.statusCode)
-#end
-`;
+import {
+  getFunctionPath,
+  getMappingTemplatePath,
+  getRootPath
+} from './utils/utils';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
@@ -107,30 +77,9 @@ export class DriversAppMvpStack extends Stack {
             }
           }
         ]
-      }
+      },
+      xrayEnabled: true
     });
-
-    const appsyncStepFunctionsRole = new Role(this, 'SyncStateMachineRole', {
-      assumedBy: new ServicePrincipal('appsync.amazonaws.com')
-    });
-    appsyncStepFunctionsRole.addToPolicy(
-      new PolicyStatement({
-        resources: ['*'],
-        actions: ['states:StartSyncExecution']
-      })
-    );
-
-    const endpoint = 'https://sync-states.' + this.region + '.amazonaws.com/';
-    const httpdatasource = api.addHttpDataSource(
-      'StepFunctionsStateMachine',
-      endpoint,
-      {
-        authorizationConfig: {
-          signingRegion: this.region,
-          signingServiceName: 'states'
-        }
-      }
-    );
 
     const dbTable = new dynamodb.Table(this, 'DbTable', {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
@@ -174,6 +123,78 @@ export class DriversAppMvpStack extends Stack {
           TABLE_NAME: dbTable.tableName
         }
       });
+
+    const apiNoneDS = api.addNoneDataSource('none');
+    // AppSync Data Source -> DynamoDB table
+    const DDBDataSource = api.addDynamoDbDataSource('DDBDataSource', dbTable);
+    const getLatestCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'getLatestCheckinFn',
+      {
+        name: 'getLatestCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        /*
+         * CDK can make mapping templates so much easier!!
+         */
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'q-get-latest-checkin-ddb.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList()
+      }
+    );
+    const getTimeDiffFunction = new appsync.AppsyncFunction(
+      this,
+      'getTimeDiffSongFn',
+      {
+        name: 'getTimeDiffFunction',
+        api,
+        dataSource: apiNoneDS,
+        //fromFile VTL demo
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'f-get-time-diff.vtl')
+        ),
+        //fromString VTL demo
+        responseMappingTemplate: appsync.MappingTemplate.fromString('{}')
+      }
+    );
+    const createCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'createCheckinFn',
+      {
+        name: 'createCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        /*
+         * CDK can make mapping templates so much easier!!
+         */
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-create-checkin-ddb.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+      }
+    );
+
+    const checkinResolver = new appsync.Resolver(
+      this,
+      'createCheckinPipeline',
+      {
+        api,
+        typeName: 'Mutation',
+        fieldName: 'createCheckin',
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-create-checkin-before.vtl')
+        ),
+        pipelineConfig: [
+          getLatestCheckinFunction,
+          getTimeDiffFunction,
+          createCheckinFunction
+        ],
+        responseMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-create-checkin-after.vtl')
+        )
+      }
+    );
 
     // Set the new Lambda function as a data source for the AppSync API
     const lambdaDs = api.addLambdaDataSource(

@@ -87,7 +87,7 @@ describe('checkin tests', () => {
   beforeAll(async () => {
     checkinManager = new Checkin();
   });
-  test('create test checkins', async () => {
+  test.skip('create test checkins', async () => {
     let createdCheckins: Array<EntityModel | Response> = [];
     for (const checkinInfo of checkinTestData) {
       const created = await checkinManager.create(checkinInfo);
@@ -106,7 +106,7 @@ describe('checkin tests', () => {
     expect(list).toHaveLength(checkinTestData.length);
   });
 
-  test('get checkin history', async () => {
+  test.only('get checkin history', async () => {
     const checkpointId = checkinTestData[0].checkpointId;
     const list = await checkinManager.getCheckinHistory(checkpointId);
     const _list = JSON.stringify(list, null, 2);

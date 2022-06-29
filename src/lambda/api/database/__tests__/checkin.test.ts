@@ -7,77 +7,99 @@ const checkinTestData: Array<CheckinType> = [
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:00:00.123-0500',
     plate: 'ZIY246',
-    driverId: '1070959307'
+    driverId: '1070959307',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'FACA-ABOGADOS',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:06:28.313-0500',
     plate: 'BAM577',
-    driverId: '1070947951'
+    driverId: '1070947951',
+    vehicleNumber: '012',
+    companyId: 'RAPIDO-SANTA'
   },
   {
     checkpointId: 'FACA-ABOGADOS',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:15:00-0500',
     plate: 'RPG333',
-    driverId: '1070959307'
+    driverId: '19134629',
+    vehicleNumber: '98',
+    companyId: 'FLOTA-AMERICANA'
   },
   {
     checkpointId: 'FACA-ABOGADOS',
     routeId: 'FACATA-BOGOTA-80',
     timestamp: '2022-06-19T10:10:35-0500',
     plate: 'ABC132',
-    driverId: '1070947951'
+    driverId: '107094791',
+    vehicleNumber: '127',
+    companyId: 'FLOTA-AGUILA'
   },
   {
     checkpointId: 'FACA-ABOGADOS',
     routeId: 'FACATA-BOGOTA-80',
     timestamp: '2022-05-19T10:23:35-0500',
     plate: 'ZIY246',
-    driverId: '1070947951'
+    driverId: '11444731',
+    vehicleNumber: '077',
+    companyId: 'COOTRANSA'
   },
   {
     checkpointId: 'FACA-CARTAGENITA',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:15:00-0500',
     plate: 'ZIY246',
-    driverId: '1070959307'
+    driverId: '1070959307',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'FACA-CARTAGENITA',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:23:02-0500',
     plate: 'BAM577',
-    driverId: '1070947951'
+    driverId: '1070947951',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'BJCA-CORSO',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:19:00-0500',
     plate: 'ZIY246',
-    driverId: '1070959307'
+    driverId: '1070959307',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'BJCA-CORSO',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:26:12-0500',
     plate: 'BAM577',
-    driverId: '1070947951'
+    driverId: '1070947951',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'MADR-PROSPERIDAD',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:25:33-0500',
     plate: 'ZIY246',
-    driverId: '1070959307'
+    driverId: '1070959307',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   },
   {
     checkpointId: 'MADR-PROSPERIDAD',
     routeId: 'FACATA-BOGOTA-13',
     timestamp: '2022-05-18T12:32:28-0500',
     plate: 'BAM577',
-    driverId: '1070947951'
+    driverId: '1070947951',
+    vehicleNumber: '077',
+    companyId: 'EXPRESO-SABANA'
   }
 ];
 

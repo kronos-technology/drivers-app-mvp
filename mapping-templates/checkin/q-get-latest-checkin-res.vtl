@@ -2,4 +2,28 @@
     $util.error($ctx.error.message, $ctx.error.type)
 #end
 
-$util.toJson($ctx.result.items[0])
+#set($queryResult = $ctx.result.items[0])
+#set($lastTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${queryResult.timestamp}))
+#set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${context.stash.timestamp}))
+#set($secondsDifference = ($currentTimestamp - $lastTimestamp)/1000 )
+#set( $hours = $secondsDifference / 3600 )
+#set( $minutes = ($secondsDifference - (3600 * $hours))/60)
+#set( $secs = $secondsDifference - (3600 * $hours) - (60 * $minutes))
+#if($hours <10)
+	#set($hours = "0${hours}")
+#end
+#if($minutes <10)
+	#set($minutes = "0${minutes}")
+#end
+#if ($secs <10)
+	#set($secs = "0${secs}")
+#end
+#set( $lastCheckin = {})
+$util.qr($lastCheckin.put("companyId", ${queryResult.companyId}))
+$util.qr($lastCheckin.put("driverId", ${queryResult.driverId}))
+$util.qr($lastCheckin.put("vehicleNumber", ${queryResult.vehicleNumber}))
+$util.qr($lastCheckin.put("timestamp", ${queryResult.timestamp}))
+$util.qr($lastCheckin.put("secondsDifference", ${secondsDifference}))
+$util.qr($lastCheckin.put("parsedDifference", "${hours}:${minutes}:${secs}"))
+$util.qr($ctx.stash.dbItem.put('lastCheckin', $util.toJson(${lastCheckin})))
+{}

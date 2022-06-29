@@ -151,7 +151,7 @@ export class DriversAppMvpStack extends Stack {
         api,
         dataSource: DDBDataSource,
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'm-create-checkin-ddb.vtl')
+          getMappingTemplatePath('checkin', 'm-create-checkin-req.vtl')
         ),
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
@@ -165,12 +165,10 @@ export class DriversAppMvpStack extends Stack {
         typeName: 'Mutation',
         fieldName: 'createCheckin',
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'm-create-checkin-before.vtl')
+          getMappingTemplatePath('checkin', 'p-create-checkin-before.vtl')
         ),
         pipelineConfig: [getLatestCheckinFunction, createCheckinFunction],
-        responseMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'm-create-checkin-after.vtl')
-        )
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );
 

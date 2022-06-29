@@ -122,6 +122,8 @@ const Schema = {
       sk: { type: String, value: 'checkin#${routeId}#${timestamp}#${plate}' },
       id: { type: String, generate: 'ulid', validate: Match.ulid },
       checkpointId: { type: String, required: true },
+      companyId: { type: String, required: true },
+      vehicleNumber: { type: String, required: true },
       routeId: { type: String, required: true },
       timestamp: { type: Date, required: true },
       plate: { type: String, required: true },

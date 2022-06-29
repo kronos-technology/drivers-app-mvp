@@ -154,8 +154,9 @@ type Checkin @aws_api_key @aws_cognito_user_pools {
   timestamp: AWSDateTime!
   plate: String!
   companyId: String!
-  vehicleNumber: number!
+  vehicleNumber: String!
   driverId: String!
+  lastCheckin: String
 }
 
 input CheckinInfo {
@@ -165,8 +166,9 @@ input CheckinInfo {
   timestamp: AWSDateTime!
   plate: String!
   companyId: String!
-  vehicleNumber: number!
+  vehicleNumber: String!
   driverId: String!
+  lastCheckin: String
 }
 
 input CheckinUpdate {
@@ -176,8 +178,9 @@ input CheckinUpdate {
   timestamp: AWSDateTime
   plate: String
   companyId: String
-  vehicleNumber: number
+  vehicleNumber: String
   driverId: String
+  lastCheckin: String
 }
 
 type RouteInCheckpoint @aws_api_key @aws_cognito_user_pools {

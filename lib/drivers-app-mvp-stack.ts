@@ -142,21 +142,7 @@ export class DriversAppMvpStack extends Stack {
         )
       }
     );
-    const getTimeDiffFunction = new appsync.AppsyncFunction(
-      this,
-      'getTimeDiffSongFn',
-      {
-        name: 'getTimeDiffFunction',
-        api,
-        dataSource: apiNoneDS,
-        //fromFile VTL demo
-        requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'f-get-time-diff.vtl')
-        ),
-        //fromString VTL demo
-        responseMappingTemplate: appsync.MappingTemplate.fromString('{}')
-      }
-    );
+
     const createCheckinFunction = new appsync.AppsyncFunction(
       this,
       'createCheckinFn',
@@ -181,11 +167,7 @@ export class DriversAppMvpStack extends Stack {
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
           getMappingTemplatePath('checkin', 'm-create-checkin-before.vtl')
         ),
-        pipelineConfig: [
-          getLatestCheckinFunction,
-          getTimeDiffFunction,
-          createCheckinFunction
-        ],
+        pipelineConfig: [getLatestCheckinFunction, createCheckinFunction],
         responseMappingTemplate: appsync.MappingTemplate.fromFile(
           getMappingTemplatePath('checkin', 'm-create-checkin-after.vtl')
         )

@@ -1,5 +1,5 @@
 
-#set($id = $context.arguments.checkinInfo.id)
+#set($id = $util.autoId())
 #set($checkpointId = $context.arguments.checkinInfo.checkpointId)
 #set($routeId = $context.arguments.checkinInfo.routeId)
 #set($timestamp = $context.arguments.checkinInfo.timestamp)
@@ -10,28 +10,26 @@
 ## Creates attributes with dates
 #set( $currentTimeEpoch = $util.time.nowEpochMilliSeconds())
 #set( $currentTime = $util.time.epochMilliSecondsToISO8601($currentTimeEpoch))
-#set( $expireTimeEpoch = $currentTimeEpoch + (1000 * 60 * 60 * 24 * 7))
 ## Creates Item with single table db structure
 #set( $primaryKey = {
     "pk": ${pk},
     "sk": ${sk}
 } )
-#set( $itemValues = {
-    "gs1pk": "checkin#",
-    "gs1sk": "${routeId}#${timestamp}",
-    "gs2pk": "checkin#",
-    "gs2sk": "${plate}#${timestamp}",
-    "checkpointId" : ${checkpointId},
-    "created": ${currentTime},
-    "driverId": ${driverId},
-    "expire": ${expireTimeEpoch},
-    "id": ${id},
-    "plate": ${plate},
-    "routeId": ${routeId},
-    "timestamp": ${timestamp},
-    "updated": ${currentTime}
+#set( $dbItem = {
+    "gs1pk": $util.dynamodb.toDynamoDBJson("checkin#"),
+    "gs1sk": $util.dynamodb.toDynamoDBJson("${routeId}#${timestamp}"),
+    "gs2pk": $util.dynamodb.toDynamoDBJson("checkin#"),
+    "gs2sk": $util.dynamodb.toDynamoDBJson("${plate}#${timestamp}"),
+    "checkpointId" : $util.dynamodb.toDynamoDBJson(${checkpointId}),
+    "created": $util.dynamodb.toDynamoDBJson(${currentTime}),
+    "driverId": $util.dynamodb.toDynamoDBJson(${driverId}),
+    "id": $util.dynamodb.toDynamoDBJson(${id}),
+    "plate": $util.dynamodb.toDynamoDBJson(${plate}),
+    "routeId": $util.dynamodb.toDynamoDBJson(${routeId}),
+    "timestamp": $util.dynamodb.toDynamoDBJson(${timestamp}),
+    "updated": $util.dynamodb.toDynamoDBJson(${currentTime})
 } )
-$util.qr($ctx.stash.put('itemValues', ${itemValues}))
+$util.qr($ctx.stash.put('dbItem', ${dbItem}))
 $util.qr($ctx.stash.put('primaryKey', ${primaryKey}))
 $util.qr($ctx.stash.put('checkpointId', ${checkpointId}))
 $util.qr($ctx.stash.put('routeId', ${routeId}))

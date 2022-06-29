@@ -134,13 +134,12 @@ export class DriversAppMvpStack extends Stack {
         name: 'getLatestCheckinFunction',
         api,
         dataSource: DDBDataSource,
-        /*
-         * CDK can make mapping templates so much easier!!
-         */
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'q-get-latest-checkin-ddb.vtl')
+          getMappingTemplatePath('checkin', 'q-get-latest-checkin-req.vtl')
         ),
-        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList()
+        responseMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'q-get-latest-checkin-res.vtl')
+        )
       }
     );
     const getTimeDiffFunction = new appsync.AppsyncFunction(
@@ -165,9 +164,6 @@ export class DriversAppMvpStack extends Stack {
         name: 'createCheckinFunction',
         api,
         dataSource: DDBDataSource,
-        /*
-         * CDK can make mapping templates so much easier!!
-         */
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
           getMappingTemplatePath('checkin', 'm-create-checkin-ddb.vtl')
         ),

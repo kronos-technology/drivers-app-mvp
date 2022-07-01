@@ -143,6 +143,20 @@ export class DriversAppMvpStack extends Stack {
       }
     );
 
+    const updateLastCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'updateLastCheckinFn',
+      {
+        name: 'updateLastCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-update-last-checkin-req.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+      }
+    );
+
     const createCheckinFunction = new appsync.AppsyncFunction(
       this,
       'createCheckinFn',
@@ -167,7 +181,11 @@ export class DriversAppMvpStack extends Stack {
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
           getMappingTemplatePath('checkin', 'p-create-checkin-before.vtl')
         ),
-        pipelineConfig: [getLatestCheckinFunction, createCheckinFunction],
+        pipelineConfig: [
+          getLatestCheckinFunction,
+          updateLastCheckinFunction,
+          createCheckinFunction
+        ],
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );

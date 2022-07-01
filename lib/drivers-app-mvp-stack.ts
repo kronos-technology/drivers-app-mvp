@@ -8,13 +8,25 @@ import {
   Duration
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
+import {
+  aws_cognito as cognito,
+  aws_dynamodb as dynamodb,
+  aws_lambda_nodejs as lambda
+} from 'aws-cdk-lib';
+import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
+import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
+import { Role, ServicePrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import * as path from 'path';
 import { queries as ApiQueries } from './queries';
 import { mutations as ApiMutations } from './mutations';
+
+import {
+  getFunctionPath,
+  getMappingTemplatePath,
+  getRootPath
+} from './utils/utils';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
@@ -65,7 +77,8 @@ export class DriversAppMvpStack extends Stack {
             }
           }
         ]
-      }
+      },
+      xrayEnabled: true
     });
 
     const dbTable = new dynamodb.Table(this, 'DbTable', {
@@ -100,15 +113,82 @@ export class DriversAppMvpStack extends Stack {
       }
     });
 
-    // Create the function
-    const appsyncHandlerLambda = new NodejsFunction(this, 'ApiLambdaResolver', {
-      runtime: Runtime.NODEJS_16_X,
-      handler: 'handler',
-      entry: path.join(__dirname, '../src/lambda/api/main.ts'),
-      environment: {
-        TABLE_NAME: dbTable.tableName
+    // Create the function for handling CRUD Operations
+    const appsyncHandlerLambda: lambda.NodejsFunction =
+      new lambda.NodejsFunction(this, 'ApiLambdaResolver', {
+        runtime: Runtime.NODEJS_16_X,
+        handler: 'handler',
+        entry: path.join(__dirname, '../src/lambda/api/main.ts'),
+        environment: {
+          TABLE_NAME: dbTable.tableName
+        }
+      });
+
+    const apiNoneDS = api.addNoneDataSource('none');
+    // AppSync Data Source -> DynamoDB table
+    const DDBDataSource = api.addDynamoDbDataSource('DDBDataSource', dbTable);
+    const getLatestCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'getLatestCheckinFn',
+      {
+        name: 'getLatestCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'q-get-latest-checkin-req.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'q-get-latest-checkin-res.vtl')
+        )
       }
-    });
+    );
+
+    const updateLastCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'updateLastCheckinFn',
+      {
+        name: 'updateLastCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-update-last-checkin-req.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+      }
+    );
+
+    const createCheckinFunction = new appsync.AppsyncFunction(
+      this,
+      'createCheckinFn',
+      {
+        name: 'createCheckinFunction',
+        api,
+        dataSource: DDBDataSource,
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'm-create-checkin-req.vtl')
+        ),
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+      }
+    );
+
+    const checkinResolver = new appsync.Resolver(
+      this,
+      'createCheckinPipeline',
+      {
+        api,
+        typeName: 'Mutation',
+        fieldName: 'createCheckin',
+        requestMappingTemplate: appsync.MappingTemplate.fromFile(
+          getMappingTemplatePath('checkin', 'p-create-checkin-before.vtl')
+        ),
+        pipelineConfig: [
+          getLatestCheckinFunction,
+          updateLastCheckinFunction,
+          createCheckinFunction
+        ],
+        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+      }
+    );
 
     // Set the new Lambda function as a data source for the AppSync API
     const lambdaDs = api.addLambdaDataSource(

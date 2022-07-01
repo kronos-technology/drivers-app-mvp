@@ -1,0 +1,48 @@
+#if($ctx.error)
+    $util.error($ctx.error.message, $ctx.error.type)
+#end
+
+##TODO: Make it work for several checkin items
+#set($queryResult = $ctx.result.items[0])
+#set($lastTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${queryResult.timestamp}))
+#set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${context.stash.timestamp}))
+#set($secondsDifference = ($currentTimestamp - $lastTimestamp)/1000 )
+#set( $hours = $secondsDifference / 3600 )
+#set( $minutes = ($secondsDifference - (3600 * $hours))/60)
+#set( $secs = $secondsDifference - (3600 * $hours) - (60 * $minutes))
+#if($hours <10)
+	#set($hours = "0${hours}")
+#end
+#if($minutes <10)
+	#set($minutes = "0${minutes}")
+#end
+#if ($secs <10)
+	#set($secs = "0${secs}")
+#end
+#set( $parsedDiff = "${hours}:${minutes}:${secs}")
+#set( $lastCheckin = {})
+$util.qr($lastCheckin.put("pk", ${queryResult.pk}))
+$util.qr($lastCheckin.put("sk", ${queryResult.sk}))
+$util.qr($lastCheckin.put("checkpointId", ${queryResult.checkpointId}))
+$util.qr($lastCheckin.put("routeId", ${queryResult.routeId}))
+$util.qr($lastCheckin.put("companyId", ${queryResult.companyId}))
+$util.qr($lastCheckin.put("driverId", ${queryResult.driverId}))
+$util.qr($lastCheckin.put("vehicleNumber", ${queryResult.vehicleNumber}))
+$util.qr($lastCheckin.put("timestamp", ${queryResult.timestamp}))
+$util.qr($lastCheckin.put("secondsDifference", ${secondsDifference}))
+$util.qr($lastCheckin.put("parsedDifference", ${parsedDiff}))
+$util.qr($ctx.stash.dbItem.put('lastCheckin', ${lastCheckin}))
+
+#set($currentCheckin = {})
+$util.qr($currentCheckin.put("pk", ${ctx.stash.primaryKey.pk}))
+$util.qr($currentCheckin.put("sk", ${ctx.stash.primaryKey.sk}))
+$util.qr($currentCheckin.put("checkpointId", ${ctx.stash.dbItem.checkpointId}))
+$util.qr($currentCheckin.put("routeId", ${ctx.stash.dbItem.routeId}))
+$util.qr($currentCheckin.put("companyId", ${ctx.stash.dbItem.companyId}))
+$util.qr($currentCheckin.put("driverId", ${ctx.stash.dbItem.driverId}))
+$util.qr($currentCheckin.put("vehicleNumber", ${ctx.stash.dbItem.vehicleNumber}))
+$util.qr($currentCheckin.put("timestamp", ${ctx.stash.dbItem.timestamp}))
+$util.qr($currentCheckin.put("secondsDifference", ${secs}))
+$util.qr($currentCheckin.put("parsedDifference", ${parsedDiff}))
+$util.qr($ctx.stash.put('currentCheckin', ${currentCheckin}))
+{}

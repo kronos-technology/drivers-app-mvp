@@ -183,6 +183,8 @@ export type CheckinType = {
   timestamp: string;
   plate: string;
   driverId: string;
+  companyId: string;
+  vehicleNumber: string;
 };
 
 export default BaseEntity;

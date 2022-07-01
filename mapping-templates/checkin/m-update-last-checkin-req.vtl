@@ -1,0 +1,14 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "UpdateItem",
+    "key" : {
+        "pk": $util.dynamodb.toDynamoDBJson($ctx.stash.dbItem.lastCheckin.pk),
+        "sk": $util.dynamodb.toDynamoDBJson($ctx.stash.dbItem.lastCheckin.sk)
+    },
+    "update" : {
+        "expression" : "SET nextCheckin = :nc",
+        "expressionValues" : {
+            ":nc" : $util.dynamodb.toDynamoDBJson(${ctx.stash.currentCheckin})
+        }
+    }
+}

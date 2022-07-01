@@ -9,7 +9,7 @@
     "lint-and-fix": "eslint . --ext .ts --fix",
     "format": "prettier --config .prettierrc './**/*.ts' --write",
     "build": "cdk synth && cdk diff",
-    "deploy": "yarn build && cdk deploy",
+    "deploy": "yarn build && cdk deploy --require-approval never",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
@@ -22,6 +22,7 @@
     "@types/node": "10.17.27",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
+    "app-root-path": "^3.0.0",
     "babel-jest": "^28.0.3",
     "esbuild": "^0.14.43",
     "eslint": "^8.14.0",

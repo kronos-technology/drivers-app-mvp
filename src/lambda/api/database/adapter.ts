@@ -92,3 +92,55 @@ export { Company } from './company';
 export { Checkpoint } from './checkpoint';
 export { Checkin } from './checkin';
 export { DbAdapter };
+
+export type VehicleType = {
+  plate: string;
+  status: string;
+  number: string;
+  companyId: string;
+  currentDriverId?: string;
+};
+
+export type RouteType = {
+  routeId: string;
+  origin: string;
+  intermediates?: Array<string>;
+  destination: string;
+  geojson: string;
+};
+
+export type DriverType = {
+  driverId: string;
+  name: string;
+  lastName: string;
+  companyId: string;
+  birthdate: string;
+  phone: string;
+};
+
+export type CompanyType = {
+  companyId: string;
+  name: string;
+  phone: string;
+  address?: string;
+  email?: string;
+  city: string;
+};
+
+export type CheckpointType = {
+  checkpointId: string;
+  latitude: string;
+  longitude: string;
+  geohash: string;
+  city: string;
+  description: string;
+};
+
+export type CheckinType = {
+  checkpointId: string;
+  routeId: string;
+  timestamp: string;
+  plate: string;
+  driverId: string;
+  timeDifference?: string;
+};

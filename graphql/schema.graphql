@@ -29,7 +29,7 @@ input DriverUpdate {
 type Vehicle @aws_api_key @aws_cognito_user_pools {
   id: String!
   plate: String!
-  number: String!
+  vehicleNumber: String!
   companyId: String!
   status: String
   currentDriverId: String
@@ -38,7 +38,7 @@ type Vehicle @aws_api_key @aws_cognito_user_pools {
 
 input VehicleInfo {
   plate: String!
-  number: String!
+  vehicleNumber: String!
   companyId: String!
   status: String
   currentDriverId: String
@@ -47,7 +47,7 @@ input VehicleInfo {
 
 input VehicleUpdate {
   plate: String!
-  number: String
+  vehicleNumber: String
   companyId: String
   status: String
   currentDriverId: String
@@ -148,32 +148,39 @@ input RouteInCompanyInfo {
 }
 
 type Checkin @aws_api_key @aws_cognito_user_pools {
-  id: String!
+  id: ID
   checkpointId: String!
   routeId: String!
   timestamp: AWSDateTime!
   plate: String!
+  companyId: String!
+  vehicleNumber: String!
   driverId: String!
-  expire: Float
+  lastCheckin: String
 }
 
 input CheckinInfo {
-  id: String!
+  id: ID
   checkpointId: String!
   routeId: String!
   timestamp: AWSDateTime!
   plate: String!
+  companyId: String!
+  vehicleNumber: String!
   driverId: String!
-  expire: Float
+  lastCheckin: String
 }
 
 input CheckinUpdate {
-  id: String!
+  id: ID
   checkpointId: String!
-  routeId: String!
-  timestamp: AWSDateTime!
-  plate: String!
-  expire: Float
+  routeId: String
+  timestamp: AWSDateTime
+  plate: String
+  companyId: String
+  vehicleNumber: String
+  driverId: String
+  lastCheckin: String
 }
 
 type RouteInCheckpoint @aws_api_key @aws_cognito_user_pools {

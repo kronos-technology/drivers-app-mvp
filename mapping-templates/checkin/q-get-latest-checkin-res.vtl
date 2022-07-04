@@ -5,8 +5,10 @@
 ##TODO: Make it work for several checkin items
 #set($queryResult = $ctx.result.items[0])
 #set($lastTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${queryResult.timestamp}))
-#set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${context.stash.timestamp}))
+#set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${ctx.args.checkinInfo.timestamp}))
 #set($secondsDifference = ($currentTimestamp - $lastTimestamp)/1000 )
+
+## Converts diff to format hh:mm:ss
 #set( $hours = $secondsDifference / 3600 )
 #set( $minutes = ($secondsDifference - (3600 * $hours))/60)
 #set( $secs = $secondsDifference - (3600 * $hours) - (60 * $minutes))
@@ -20,6 +22,7 @@
 	#set($secs = "0${secs}")
 #end
 #set( $parsedDiff = "${hours}:${minutes}:${secs}")
+
 #set( $lastCheckin = {})
 $util.qr($lastCheckin.put("pk", ${queryResult.pk}))
 $util.qr($lastCheckin.put("sk", ${queryResult.sk}))
@@ -33,16 +36,10 @@ $util.qr($lastCheckin.put("secondsDifference", ${secondsDifference}))
 $util.qr($lastCheckin.put("parsedDifference", ${parsedDiff}))
 $util.qr($ctx.stash.dbItem.put('lastCheckin', ${lastCheckin}))
 
-#set($currentCheckin = {})
-$util.qr($currentCheckin.put("pk", ${ctx.stash.primaryKey.pk}))
-$util.qr($currentCheckin.put("sk", ${ctx.stash.primaryKey.sk}))
-$util.qr($currentCheckin.put("checkpointId", ${ctx.stash.dbItem.checkpointId}))
-$util.qr($currentCheckin.put("routeId", ${ctx.stash.dbItem.routeId}))
-$util.qr($currentCheckin.put("companyId", ${ctx.stash.dbItem.companyId}))
-$util.qr($currentCheckin.put("driverId", ${ctx.stash.dbItem.driverId}))
-$util.qr($currentCheckin.put("vehicleNumber", ${ctx.stash.dbItem.vehicleNumber}))
-$util.qr($currentCheckin.put("timestamp", ${ctx.stash.dbItem.timestamp}))
-$util.qr($currentCheckin.put("secondsDifference", ${secs}))
-$util.qr($currentCheckin.put("parsedDifference", ${parsedDiff}))
-$util.qr($ctx.stash.put('currentCheckin', ${currentCheckin}))
+#set( $thisCheckin = $util.map.copyAndRemoveAllKeys(${ctx.args.checkinInfo}, []) )
+$util.qr($thisCheckin.put("pk", ${ctx.stash.primaryKey.pk}))
+$util.qr($thisCheckin.put("sk", ${ctx.stash.primaryKey.sk}))
+$util.qr($thisCheckin.put("secondsDifference", ${secondsDifference}))
+$util.qr($thisCheckin.put("parsedDifference", ${parsedDiff}))
+$util.qr($ctx.stash.put('thisCheckin', ${thisCheckin}))
 {}

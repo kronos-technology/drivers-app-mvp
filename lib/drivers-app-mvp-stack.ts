@@ -183,8 +183,8 @@ export class DriversAppMvpStack extends Stack {
         ),
         pipelineConfig: [
           getLatestCheckinFunction,
-          createCheckinFunction,
-          updateLastCheckinFunction
+          updateLastCheckinFunction,
+          createCheckinFunction
         ],
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }

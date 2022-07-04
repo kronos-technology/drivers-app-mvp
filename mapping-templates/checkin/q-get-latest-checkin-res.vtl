@@ -5,15 +5,10 @@
 ##TODO: Make it work for several checkin items
 #set($queryResult = $ctx.result.items[0])
 #set($lastTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${queryResult.timestamp}))
-<<<<<<< HEAD
-#set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${context.stash.timestamp}))
-#set($secondsDifference = ($currentTimestamp - $lastTimestamp)/1000 )
-=======
 #set($currentTimestamp = $util.time.parseISO8601ToEpochMilliSeconds(${ctx.args.checkinInfo.timestamp}))
 #set($secondsDifference = ($currentTimestamp - $lastTimestamp)/1000 )
 
 ## Converts diff to format hh:mm:ss
->>>>>>> checkin-process
 #set( $hours = $secondsDifference / 3600 )
 #set( $minutes = ($secondsDifference - (3600 * $hours))/60)
 #set( $secs = $secondsDifference - (3600 * $hours) - (60 * $minutes))
@@ -38,7 +33,7 @@ $util.qr($lastCheckin.put("vehicleNumber", ${queryResult.vehicleNumber}))
 $util.qr($lastCheckin.put("timestamp", ${queryResult.timestamp}))
 $util.qr($lastCheckin.put("secondsDifference", ${secondsDifference}))
 $util.qr($lastCheckin.put("parsedDifference", ${parsedDiff}))
-$util.qr($ctx.stash.dbItem.put('lastCheckin', ${lastCheckin}))
+
 
 #set( $thisCheckin = $util.map.copyAndRemoveAllKeys(${ctx.args.checkinInfo}, []) )
 $util.qr($thisCheckin.put("pk", ${ctx.stash.primaryKey.pk}))

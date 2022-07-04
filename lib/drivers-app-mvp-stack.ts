@@ -8,25 +8,12 @@ import {
   Duration
 } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import {
-  aws_cognito as cognito,
-  aws_dynamodb as dynamodb,
-  aws_lambda_nodejs as lambda
-} from 'aws-cdk-lib';
-import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
-import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
-import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import { Role, ServicePrincipal, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import * as path from 'path';
 import { queries as ApiQueries } from './queries';
 import { mutations as ApiMutations } from './mutations';
 
-import {
-  getFunctionPath,
-  getMappingTemplatePath,
-  getRootPath
-} from './utils/utils';
+import { getMappingTemplatePath } from './utils/utils';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {

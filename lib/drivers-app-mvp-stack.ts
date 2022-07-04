@@ -113,18 +113,6 @@ export class DriversAppMvpStack extends Stack {
       }
     });
 
-    // Create the function for handling CRUD Operations
-    const appsyncHandlerLambda: lambda.NodejsFunction =
-      new lambda.NodejsFunction(this, 'ApiLambdaResolver', {
-        runtime: Runtime.NODEJS_16_X,
-        handler: 'handler',
-        entry: path.join(__dirname, '../src/lambda/api/main.ts'),
-        environment: {
-          TABLE_NAME: dbTable.tableName
-        }
-      });
-
-    const apiNoneDS = api.addNoneDataSource('none');
     // AppSync Data Source -> DynamoDB table
     const DDBDataSource = api.addDynamoDbDataSource('DDBDataSource', dbTable);
     const getLatestCheckinFunction = new appsync.AppsyncFunction(
@@ -189,23 +177,6 @@ export class DriversAppMvpStack extends Stack {
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );
-
-    // Set the new Lambda function as a data source for the AppSync API
-    const lambdaDs = api.addLambdaDataSource(
-      'lambdaDatasource',
-      appsyncHandlerLambda
-    );
-
-    const queryResolvers = this.apiQueries.map((field) => {
-      lambdaDs.createResolver({ typeName: 'Query', fieldName: field });
-    });
-
-    const mutationResolvers = this.apiMutations.map((field) => {
-      lambdaDs.createResolver({ typeName: 'Mutation', fieldName: field });
-    });
-
-    // Enable the Lambda function to access the DynamoDB table (using IAM)
-    dbTable.grantFullAccess(appsyncHandlerLambda);
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

@@ -8,7 +8,7 @@
     "update" : {
         "expression" : "SET nextCheckin = :nc",
         "expressionValues" : {
-            ":nc" : $util.dynamodb.toDynamoDBJson(${ctx.stash.currentCheckin})
+            ":nc" : $util.dynamodb.toDynamoDBJson(${ctx.stash.thisCheckin})
         }
     }
 }

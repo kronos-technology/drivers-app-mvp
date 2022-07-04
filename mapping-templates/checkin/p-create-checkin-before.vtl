@@ -1,43 +1,25 @@
-#set($id = $util.autoId())
-#set($checkpointId = $context.arguments.checkinInfo.checkpointId)
-#set($companyId = $context.arguments.checkinInfo.companyId)
-#set($routeId = $context.arguments.checkinInfo.routeId)
-#set($vehicleNumber = $context.arguments.checkinInfo.vehicleNumber)
-#set($timestamp = $context.arguments.checkinInfo.timestamp)
-#set($plate = $context.arguments.checkinInfo.plate)
-#set($driverId = $context.arguments.checkinInfo.driverId)
-#set($pk = "checkpoint#${checkpointId}")
-#set($sk = "checkin#${routeId}#${timestamp}#${plate}")
-## Creates attributes with dates
-#set( $currentTimeEpoch = $util.time.nowEpochMilliSeconds())
-#set( $currentTime = $util.time.epochMilliSecondsToISO8601($currentTimeEpoch))
-## Creates Item with single table db structure
+#set( $checkpointId = $context.arguments.checkinInfo.checkpointId )
+#set( $routeId = $context.arguments.checkinInfo.routeId )
+#set( $timestamp = $context.arguments.checkinInfo.timestamp )
+#set( $plate = $context.arguments.checkinInfo.plate )
 #set( $primaryKey = {
-    "pk": ${pk},
-    "sk": ${sk}
+    "pk": "checkpoint#${checkpointId}",
+    "sk": "checkin#${routeId}#${timestamp}#${plate}"
 } )
-#set( $dbItem = {
-    "gs1pk": "checkin#",
-    "gs1sk": "${routeId}#${timestamp}",
-    "gs2pk": "checkin#",
-    "gs2sk": "${plate}#${timestamp}",
-    "checkpointId" : ${checkpointId},
-    "companyId" : ${companyId},
-    "created": ${currentTime},
-    "driverId": ${driverId},
-    "id": ${id},
-    "plate": ${plate},
-    "routeId": ${routeId},
-    "timestamp": ${timestamp},
-    "vehicleNumber": ${vehicleNumber},
-    "updated": ${currentTime},
-    "_type": "CHECKIN"
-} )
-$util.qr($ctx.stash.put('dbItem', ${dbItem}))
 $util.qr($ctx.stash.put('primaryKey', ${primaryKey}))
-$util.qr($ctx.stash.put('checkpointId', ${checkpointId}))
-$util.qr($ctx.stash.put('routeId', ${routeId}))
-$util.qr($ctx.stash.put('timestamp', ${timestamp}))
-$util.qr($ctx.stash.put('vehicleNumber', ${vehicleNumber}))
-$util.qr($ctx.stash.put('companyId', ${companyId}))
+
+#set($id = $util.autoId())
+#set( $tsLength = $timestamp.length() )
+#set( $timezone =  $timestamp.substring(23 , 29) )
+#set( $nowEpochMillis = $util.time.nowEpochMilliSeconds() )
+#set( $currentTime = $util.time.epochMilliSecondsToFormatted($nowEpochMillis, "yyyy-MM-dd'T'HH:mm:ssZ", $timezone) )
+#set($ddbItem = $util.map.copyAndRemoveAllKeys($ctx.args.checkinInfo, []) )
+$util.qr($ddbItem.put("gs1pk", "checkin#"))
+$util.qr($ddbItem.put("gs1sk", "${routeId}#{timestamp}"))
+$util.qr($ddbItem.put("gs2pk", "checkin#"))
+$util.qr($ddbItem.put("gs2sk", "${plate}#${timestamp}"))
+$util.qr($ddbItem.put("updated", "${currentTime}"))
+$util.qr($ddbItem.put("created", "${currentTime}"))
+$util.qr($ddbItem.put("id", "{id}"))
+$util.qr($ctx.stash.put('dbItem', ${ddbItem}))
 {}

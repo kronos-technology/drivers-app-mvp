@@ -20,6 +20,6 @@ $util.qr($ddbItem.put("gs2pk", "checkin#"))
 $util.qr($ddbItem.put("gs2sk", "${plate}#${timestamp}"))
 $util.qr($ddbItem.put("updated", "${currentTime}"))
 $util.qr($ddbItem.put("created", "${currentTime}"))
-$util.qr($ddbItem.put("id", "{id}"))
+$util.qr($ddbItem.put("id", "${id}"))
 $util.qr($ctx.stash.put('dbItem', ${ddbItem}))
 {}

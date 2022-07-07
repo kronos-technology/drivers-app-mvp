@@ -4,7 +4,7 @@
     "operation" : "UpdateItem",
 
     "key" : {
-        "pk" : $util.dynamodb.toDynamoDBJson("driver#$ctx.args.driverId"),
+        "pk" : $util.dynamodb.toDynamoDBJson("driver#${ctx.args.data.driverId}"),
         "sk" : $util.dynamodb.toDynamoDBJson("driver#profile")
     },
 
@@ -17,7 +17,7 @@
     #set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
     $util.qr( $context.arguments.put("updated", ${currentTime}) )
 
-    #foreach( $entry in $context.arguments.entrySet() )
+    #foreach( $entry in $ctx.args.data.entrySet() )
         #if( $entry.key != "driverId" )
             #if( (!$entry.value) && ("$!{entry.value}" == "") )
                 ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **

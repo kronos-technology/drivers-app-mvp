@@ -14,8 +14,9 @@
     #set( $expSet = {} )
     #set( $expAdd = {} )
     #set( $expRemove = [] )
+    #set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
+    $util.qr( $context.arguments.put("updated", ${currentTime}) )
 
-    ## Iterate through each argument, skipping "id" and "expectedVersion" **
     #foreach( $entry in $context.arguments.entrySet() )
         #if( $entry.key != "driverId" )
             #if( (!$entry.value) && ("$!{entry.value}" == "") )

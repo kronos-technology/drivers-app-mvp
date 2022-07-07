@@ -10,7 +10,11 @@ import {
 import { Construct } from 'constructs';
 import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import { queries as ApiQueries } from './queries';
+import {
+  queries as ApiQueries,
+  resolvers as ApiResolvers,
+  Resolver
+} from './queries';
 import { mutations as ApiMutations } from './mutations';
 
 import { getMappingTemplatePath } from './utils/utils';
@@ -19,6 +23,7 @@ import { getMappingTemplatePath } from './utils/utils';
 export class DriversAppMvpStack extends Stack {
   apiQueries: Array<string> = ApiQueries;
   apiMutations: Array<string> = ApiMutations;
+  apiResolvers: Array<Resolver> = ApiResolvers;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -164,6 +169,11 @@ export class DriversAppMvpStack extends Stack {
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );
+
+    // Add resolvers to handle CRUD functionalities against dynamodb
+    const apiResolvers = this.apiResolvers.map((r: Resolver) => {
+      DDBDataSource.createResolver(r);
+    });
 
     new CfnOutput(this, 'GraphQLAPIURL', {
       value: api.graphqlUrl

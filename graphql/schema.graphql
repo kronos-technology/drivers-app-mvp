@@ -197,29 +197,25 @@ input RouteInCheckpointInfo {
 type Query {
   # Driver
   getDriverById(driverId: String!): Driver @aws_api_key @aws_cognito_user_pools
-  listDrivers: [Driver] @aws_api_key @aws_cognito_user_pools
-  driversByCompany(companyId: String!): [Driver] @aws_api_key @aws_cognito_user_pools
+  listDrivers(companyId: String, limit: Int): [Driver] @aws_api_key @aws_cognito_user_pools
   # Vehicle
   getVehicleByPlate(plate: String!): Vehicle @aws_api_key @aws_cognito_user_pools
-  listVehicles: [Vehicle] @aws_api_key @aws_cognito_user_pools
-  vehiclesByCompany(companyId: String!): [Vehicle] @aws_api_key @aws_cognito_user_pools
+  listVehicles(companyId: String, limit: Int): [Vehicle] @aws_api_key @aws_cognito_user_pools
   # Company
   getCompanyById(companyId: String!): Company @aws_api_key @aws_cognito_user_pools
   listCompanies: [Company] @aws_api_key @aws_cognito_user_pools
   routesInCompany(companyId: String!): [RouteInCompany] @aws_api_key @aws_cognito_user_pools
   # Route
   getRouteById(routeId: String!): Route @aws_api_key @aws_cognito_user_pools
-  listRoutes: [Route] @aws_api_key @aws_cognito_user_pools
-  routesByOrigin(origin: String!): [Route] @aws_api_key @aws_cognito_user_pools
-  routesByDestination(destination: String!): [Route] @aws_api_key @aws_cognito_user_pools
+  listRoutes(limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
+  routesByOrigin(origin: String!, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
+  routesByDestination(destination: String!, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
   # Checkpoint
   getCheckpointById(checkpointId: ID!): Checkpoint @aws_api_key @aws_cognito_user_pools
-  listCheckpoints: [Checkpoint] @aws_api_key @aws_cognito_user_pools
+  listCheckpoints(limit: Int): [Checkpoint] @aws_api_key @aws_cognito_user_pools
   routesInCheckpoint(checkpointId: ID!): [RouteInCheckpoint] @aws_api_key @aws_cognito_user_pools
   # Checkin
   getCheckinById(checkinId: String!): Checkin @aws_api_key @aws_cognito_user_pools
-  checkinHistory(checkpointId: String!): [Checkin] @aws_api_key @aws_cognito_user_pools
-  checkinHistoryByRoute(routeInCheckpoint: RouteInCheckpointInfo!): [Checkin] @aws_api_key @aws_cognito_user_pools
 }
 
 type Mutation {

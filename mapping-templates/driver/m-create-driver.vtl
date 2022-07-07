@@ -1,0 +1,18 @@
+#set( $primaryKey = {
+    "pk": "driver#${ctx.args.driverInfo.driverId}",
+    "sk": "driver#profile"
+    }
+)
+#set( $driverItem = $util.map.copyAndRemoveAllKeys($ctx.args.driverInfo, []) )
+#set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
+$util.qr( $driverItem.put("id", $util.autoId() ))
+$util.qr( $driverItem.put("gs1pk", "driver#") )
+$util.qr( $driverItem.put("gs1sk", "${ctx.args.driverInfo.companyId}#${ctx.args.driverInfo.name}#${ctx.args.driverInfo.lastName}") )
+$util.qr( $driverItem.put("created", ${currentTime}) )
+$util.qr( $driverItem.put("updated", ${currentTime}) )
+{
+    "version" : "2017-02-28",
+    "operation" : "PutItem",
+    "key": $util.dynamodb.toMapValuesJson($primaryKey),
+    "attributeValues" : $util.dynamodb.toMapValuesJson($driverItem)
+}

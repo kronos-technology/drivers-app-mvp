@@ -1,0 +1,18 @@
+#set( $primaryKey = {
+    "pk": "company#${ctx.args.companyInfo.companyId}",
+    "sk": "company#profile"
+    }
+)
+#set( $companyItem = $util.map.copyAndRemoveAllKeys($ctx.args.companyInfo, []) )
+#set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
+$util.qr( $companyItem.put("id", $util.autoId() ))
+$util.qr( $companyItem.put("gs1pk", "driver#") )
+$util.qr( $companyItem.put("gs1sk", "${ctx.args.driverInfo.companyId}#${ctx.args.driverInfo.name}#${ctx.args.driverInfo.lastName}") )
+$util.qr( $companyItem.put("created", ${currentTime}) )
+$util.qr( $companyItem.put("updated", ${currentTime}) )
+{
+    "version" : "2017-02-28",
+    "operation" : "PutItem",
+    "key": $util.dynamodb.toMapValuesJson($primaryKey),
+    "attributeValues" : $util.dynamodb.toMapValuesJson($driverItem)
+}

@@ -220,50 +220,50 @@ type Query {
 
 type Mutation {
   # Driver
-  createDriver(driverInfo: DriverInfo!): Driver
+  createDriver(data: DriverInfo!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteDriver(driverId: String!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  updateDriver(driverUpdate: DriverUpdate!): Driver
+  updateDriver(data: DriverUpdate!): Driver
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Vehicle
-  createVehicle(vehicleInfo: VehicleInfo!): Vehicle
+  createVehicle(data: VehicleInfo!): Vehicle
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteVehicle(plate: String!): Vehicle
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  updateVehicle(vehicleUpdate: VehicleUpdate!): Vehicle
+  updateVehicle(data: VehicleUpdate!): Vehicle
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Company
-  createCompany(companyInfo: CompanyInfo!): Company
+  createCompany(data: CompanyInfo!): Company
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteCompany(companyId: String!): Company
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  updateCompany(companyUpdate: CompanyUpdate!): Company
+  updateCompany(data: CompanyUpdate!): Company
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   assignRouteInCompany(routeInCompany: RouteInCompanyInfo!): RouteInCompany
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   unassignRouteInCompany(routeInCompany: RouteInCompanyInfo!): RouteInCompany
   # Route
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  createRoute(routeInfo: RouteInfo!): Route
+  createRoute(data: RouteInfo!): Route
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteRoute(routeId: String!): Route
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  updateRoute(routeUpdate: RouteUpdate!): Route
+  updateRoute(data: RouteUpdate!): Route
   # Checkpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  createCheckpoint(checkpointInfo: CheckpointInfo!): Checkpoint
+  createCheckpoint(data: CheckpointInfo!): Checkpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   deleteCheckpoint(checkpointId: String!): Checkpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  updateCheckpoint(checkpointUpdate: CheckpointUpdate!): Company
+  updateCheckpoint(data: CheckpointUpdate!): Company
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  assignRouteInCheckpoint(routeInCheckpoint: RouteInCheckpointInfo!): RouteInCheckpoint
+  assignRouteInCheckpoint(data: RouteInCheckpointInfo!): RouteInCheckpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  unassignRouteInCheckpoint(routeInCheckpoint: RouteInCheckpointInfo!): RouteInCheckpoint
+  unassignRouteInCheckpoint(data: RouteInCheckpointInfo!): RouteInCheckpoint
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Checkin
-  createCheckin(checkinInfo: CheckinInfo!): Checkin
+  createCheckin(data: CheckinInfo!): Checkin
     @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
 }
 

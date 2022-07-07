@@ -1,7 +1,7 @@
-#set( $checkpointId = $context.arguments.checkinInfo.checkpointId )
-#set( $routeId = $context.arguments.checkinInfo.routeId )
-#set( $timestamp = $context.arguments.checkinInfo.timestamp )
-#set( $plate = $context.arguments.checkinInfo.plate )
+#set( $checkpointId = $context.arguments.data.checkpointId )
+#set( $routeId = $context.arguments.data.routeId )
+#set( $timestamp = $context.arguments.data.timestamp )
+#set( $plate = $context.arguments.data.plate )
 #set( $primaryKey = {
     "pk": "checkpoint#${checkpointId}",
     "sk": "checkin#${routeId}#${timestamp}#${plate}"
@@ -13,7 +13,7 @@ $util.qr($ctx.stash.put('primaryKey', ${primaryKey}))
 #set( $timezone =  $timestamp.substring(23 , 29) )
 #set( $nowEpochMillis = $util.time.nowEpochMilliSeconds() )
 #set( $currentTime = $util.time.epochMilliSecondsToFormatted($nowEpochMillis, "yyyy-MM-dd'T'HH:mm:ssZ", $timezone) )
-#set($ddbItem = $util.map.copyAndRemoveAllKeys($ctx.args.checkinInfo, []) )
+#set($ddbItem = $util.map.copyAndRemoveAllKeys($ctx.args.data, []) )
 $util.qr($ddbItem.put("gs1pk", "checkin#"))
 $util.qr($ddbItem.put("gs1sk", "${routeId}#{timestamp}"))
 $util.qr($ddbItem.put("gs2pk", "checkin#"))

@@ -5,7 +5,7 @@
         "expression" : "pk = :pk and begins_with(sk, :skprefix)",
         "expressionValues" : {
             ":pk":  $util.dynamodb.toDynamoDBJson($context.stash.primaryKey.pk),
-            ":skprefix": $util.dynamodb.toDynamoDBJson("checkin#$ctx.args.checkinInfo.routeId")}},
+            ":skprefix": $util.dynamodb.toDynamoDBJson("checkin#$ctx.args.data.routeId")}},
     "scanIndexForward" : false,
     "consistentRead" : true,
     "limit": $util.toJson(1)

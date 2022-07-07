@@ -49,6 +49,49 @@ const driverResolvers: Array<Resolver> = [
     responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
   }
 ];
+
+const companyResolvers: Array<Resolver> = [
+  {
+    typeName: 'Query',
+    fieldName: 'getCompanyById',
+    requestMappingTemplate: appsync.MappingTemplate.fromFile(
+      getMappingTemplatePath('company', 'q-get-company-by-id.vtl')
+    ),
+    responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+  },
+  {
+    typeName: 'Query',
+    fieldName: 'listCompanies',
+    requestMappingTemplate: appsync.MappingTemplate.fromFile(
+      getMappingTemplatePath('company', 'q-list-companies.vtl')
+    ),
+    responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultList()
+  },
+  {
+    typeName: 'Mutation',
+    fieldName: 'createCompany',
+    requestMappingTemplate: appsync.MappingTemplate.fromFile(
+      getMappingTemplatePath('company', 'm-create-company.vtl')
+    ),
+    responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+  },
+  {
+    typeName: 'Mutation',
+    fieldName: 'updateCompany',
+    requestMappingTemplate: appsync.MappingTemplate.fromFile(
+      getMappingTemplatePath('company', 'm-update-company.vtl')
+    ),
+    responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+  },
+  {
+    typeName: 'Mutation',
+    fieldName: 'deleteCompany',
+    requestMappingTemplate: appsync.MappingTemplate.fromFile(
+      getMappingTemplatePath('company', 'm-delete-company.vtl')
+    ),
+    responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+  }
+];
 const driverQueries = ['getDriverById', 'listDrivers', 'driversByCompany'];
 
 const vehicleQueries = [
@@ -86,5 +129,5 @@ const queries: Array<string> = driverQueries.concat(
   checkpointQueries
 );
 
-const resolvers: Array<Resolver> = driverResolvers.concat([]);
+const resolvers: Array<Resolver> = driverResolvers.concat(companyResolvers);
 export { queries, resolvers };

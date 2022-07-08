@@ -7,7 +7,7 @@
 #set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
 $util.qr( $dbItem.put("id", $util.autoId() ))
 $util.qr( $dbItem.put("gs1pk", "company#") )
-$util.qr( $dbItem.put("gs1sk", "city#${ctx.args.data.city}") )
+$util.qr( $dbItem.put("gs1sk", "${ctx.args.data.city}") )
 $util.qr( $dbItem.put("created", ${currentTime}) )
 $util.qr( $dbItem.put("updated", ${currentTime}) )
 {

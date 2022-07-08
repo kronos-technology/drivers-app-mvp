@@ -67,15 +67,15 @@ type Company @aws_api_key @aws_cognito_user_pools {
 }
 
 input CompanyInfo{
-  id: String!
+  id: String
   alias: String!
   companyId: String!
   name: String!
   phone: AWSPhone!
-  email: String!
+  email: String
   city: String!
-  address: String!
-  nit: String!
+  address: String
+  nit: String
 }
 
 input CompanyUpdate {

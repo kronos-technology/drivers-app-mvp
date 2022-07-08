@@ -92,6 +92,7 @@ const companyResolvers: Array<Resolver> = [
     responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
   }
 ];
+
 const driverQueries = ['getDriverById', 'listDrivers', 'driversByCompany'];
 
 const vehicleQueries = [

@@ -90,7 +90,7 @@ input CompanyUpdate {
 }
 
 type Route @aws_api_key @aws_cognito_user_pools {
-  id: String!
+  id: String
   routeId: String!
   origin: String!
   destination: String!
@@ -99,7 +99,7 @@ type Route @aws_api_key @aws_cognito_user_pools {
 }
 
 input RouteInfo {
-  routeid: String!
+  routeId: String!
   origin: String!
   destination: String!
   geojson: String!
@@ -107,7 +107,7 @@ input RouteInfo {
 }
 
 input RouteUpdate {
-  route_id: String!
+  routeId: String!
   origin: String
   destination: String
   geojson: String
@@ -210,9 +210,7 @@ type Query {
   listRoutesInCompany(companyId: String!): [RouteInCompany] @aws_api_key @aws_cognito_user_pools
   # Route
   getRouteById(routeId: String!): Route @aws_api_key @aws_cognito_user_pools
-  listRoutes(limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
-  routesByOrigin(origin: String!, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
-  routesByDestination(destination: String!, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
+  listRoutes(origin: String, destination: String, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
   # Checkpoint
   getCheckpointById(checkpointId: ID!): Checkpoint @aws_api_key @aws_cognito_user_pools
   listCheckpoints(route: String, limit: Int): [Checkpoint] @aws_api_key @aws_cognito_user_pools

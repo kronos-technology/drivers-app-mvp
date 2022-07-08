@@ -10,19 +10,12 @@ import {
 import { Construct } from 'constructs';
 import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import {
-  queries as ApiQueries,
-  resolvers as ApiResolvers,
-  Resolver
-} from './queries';
-import { mutations as ApiMutations } from './mutations';
+import { resolvers as ApiResolvers, Resolver } from './resolvers';
 
 import { getMappingTemplatePath } from './utils/utils';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
-  apiQueries: Array<string> = ApiQueries;
-  apiMutations: Array<string> = ApiMutations;
   apiResolvers: Array<Resolver> = ApiResolvers;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);

@@ -1,5 +1,3 @@
-// lib/cdk-products-stack.ts
-
 import {
   Stack,
   StackProps,
@@ -10,13 +8,15 @@ import {
 import { Construct } from 'constructs';
 import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import { resolvers as ApiResolvers, Resolver } from './resolvers';
-
+import {
+  ResolverType,
+  resolvers as ApiResolvers
+} from './api-resolvers/resolver-module';
 import { getMappingTemplatePath } from './utils/utils';
 
 // lib/cdk-products-stack.ts
 export class DriversAppMvpStack extends Stack {
-  apiResolvers: Array<Resolver> = ApiResolvers;
+  apiResolvers: Array<ResolverType> = ApiResolvers;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -164,7 +164,7 @@ export class DriversAppMvpStack extends Stack {
     );
 
     // Add resolvers to handle CRUD functionalities against dynamodb
-    const apiResolvers = this.apiResolvers.map((r: Resolver) => {
+    const apiResolvers = this.apiResolvers.map((r: ResolverType) => {
       DDBDataSource.createResolver(r);
     });
 

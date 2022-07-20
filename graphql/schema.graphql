@@ -253,6 +253,7 @@ input TripUpdate @aws_api_key @aws_cognito_user_pools {
   routeId: String!
   startTime: AWSDateTime!
   status: String
+  tickets: [Ticket]
   vehicleId: String!
 }
 

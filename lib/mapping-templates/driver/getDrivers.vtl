@@ -4,10 +4,10 @@
 	"operation" : "Query",
 	"query" : {
 		"expressionValues" : {
-			":gs1pk": $util.dynamodb.toDynamoDBJson("company#")
-		#if( ${ctx.args.city} )
-			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.city})
+			":gs1pk": $util.dynamodb.toDynamoDBJson("driver#")
+		#if( ${ctx.args.companyId} )
 			#set( $expression = "${expression} and begins_with(gs1sk, :gs1sk)")
+			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.companyId})
 		#end
 		},
 		"expression" : "${expression}"

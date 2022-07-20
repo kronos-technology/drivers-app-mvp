@@ -9,8 +9,8 @@
 			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.origin})
 			#set( $expression = "${expression} and begins_with(gs1sk, :gs1sk)")
 		#elseif( ${ctx.args.destination} )
-			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.destination})
 			#set( $expression = "${expression} and begins_with(gs1sk, :gs1sk)")
+			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.destination})
         #end
 		},
 		"expression" : "${expression}"

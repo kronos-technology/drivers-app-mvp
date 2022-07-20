@@ -19,7 +19,7 @@
     $util.qr( $context.arguments.put("updated", ${currentTime}) )
 
     #foreach( $entry in $ctx.args.data.entrySet() )
-        #if( $entry.key != "driverId" )
+        #if( $entry.key != "routeId" )
             #if( (!$entry.value) && ("$!{entry.value}" == "") )
                 ## If the argument is set to "null", then remove that attribute from the item in DynamoDB **
 
@@ -30,12 +30,7 @@
 
                 $!{expSet.put("#${entry.key}", ":${entry.key}")}
                 $!{expNames.put("#${entry.key}", "$entry.key")}
-
-                #if( $entry.key == "ups" || $entry.key == "downs" )
-                    $!{expValues.put(":${entry.key}", { "N" : $entry.value })}
-                #else
-                    $!{expValues.put(":${entry.key}", { "S" : "${entry.value}" })}
-                #end
+                $!{expValues.put(":${entry.key}", { "S" : "${entry.value}" })}
             #end
         #end
     #end

@@ -1,8 +1,8 @@
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
-import { Resolver } from './resolver-module';
+import { ResolverType } from './main';
 import { getMappingTemplatePath } from '../utils/utils';
 
-const ticketResolvers = [
+const ticketResolvers: Array<ResolverType> = [
   {
     typeName: 'Query',
     fieldName: 'getTicket',

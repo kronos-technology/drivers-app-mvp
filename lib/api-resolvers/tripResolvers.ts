@@ -1,5 +1,5 @@
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
-import { ResolverType } from './resolver-module';
+import { ResolverType } from './main';
 import { getMappingTemplatePath } from '../utils/utils';
 
 const tripResolvers: Array<ResolverType> = [
@@ -37,9 +37,9 @@ const tripResolvers: Array<ResolverType> = [
   },
   {
     typeName: 'Mutation',
-    fieldName: 'deleteDriver',
+    fieldName: 'deleteTrip',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('driver', 'deleteDriver.vtl')
+      getMappingTemplatePath('trip', 'deleteTrip.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   }

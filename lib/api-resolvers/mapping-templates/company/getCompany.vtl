@@ -1,0 +1,9 @@
+{
+    "version" : "2017-02-28",
+    "operation" : "GetItem",
+    "key" : {
+        "pk" : $util.dynamodb.toDynamoDBJson("company#${ctx.args.companyId}"),
+        "sk" : $util.dynamodb.toDynamoDBJson("company#profile")
+    },
+    "consistentRead" : true
+}

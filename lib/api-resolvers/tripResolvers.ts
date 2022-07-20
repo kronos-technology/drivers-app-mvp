@@ -2,47 +2,47 @@ import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 import { ResolverType } from './resolver-module';
 import { getMappingTemplatePath } from '../utils/utils';
 
-const routeResolvers: Array<ResolverType> = [
+const tripResolvers: Array<ResolverType> = [
   {
     typeName: 'Query',
-    fieldName: 'getRoute',
+    fieldName: 'getTrip',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('route', 'getRoute.vtl')
+      getMappingTemplatePath('trip', 'getTrip.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   },
   {
     typeName: 'Query',
-    fieldName: 'getRoutes',
+    fieldName: 'getTrips',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('route', 'getRoutes.vtl')
+      getMappingTemplatePath('trip', 'getTrips.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultList()
   },
   {
     typeName: 'Mutation',
-    fieldName: 'createRoute',
+    fieldName: 'createTrips',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('route', 'createRoute.vtl')
+      getMappingTemplatePath('trip', 'createTrip.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   },
   {
     typeName: 'Mutation',
-    fieldName: 'updateRoute',
+    fieldName: 'updateTrip',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('route', 'updateRoute.vtl')
+      getMappingTemplatePath('trip', 'updateTrip.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   },
   {
     typeName: 'Mutation',
-    fieldName: 'deleteRoute',
+    fieldName: 'deleteDriver',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('route', 'deleteRoute.vtl')
+      getMappingTemplatePath('driver', 'deleteDriver.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   }
 ];
 
-export { routeResolvers };
+export { tripResolvers };

@@ -10,7 +10,10 @@ function getRootPath(pathFromRoot: string) {
 }
 
 function getMappingTemplatePath(entity: string, mappingTemplateName: string) {
-  return join(path, `./lib/mapping-templates/${entity}/${mappingTemplateName}`);
+  return join(
+    path,
+    `./lib/api-resolvers/mapping-templates/${entity}/${mappingTemplateName}`
+  );
 }
 
 export { getFunctionPath, getRootPath, getMappingTemplatePath };

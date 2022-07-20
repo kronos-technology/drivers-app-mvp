@@ -1,6 +1,0 @@
-{
-    "version" : "2017-02-28",
-    "operation" : "PutItem",
-    "key": $util.dynamodb.toMapValuesJson($ctx.stash.primaryKey),
-    "attributeValues" : $util.dynamodb.toMapValuesJson($ctx.stash.dbItem)
-}

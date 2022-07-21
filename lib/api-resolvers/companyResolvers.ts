@@ -1,5 +1,5 @@
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
-import { ResolverType } from './resolver-module';
+import { ResolverType } from './main';
 import { getMappingTemplatePath } from '../utils/utils';
 
 const companyResolvers: Array<ResolverType> = [

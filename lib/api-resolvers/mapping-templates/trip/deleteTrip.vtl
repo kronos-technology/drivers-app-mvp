@@ -1,8 +1,12 @@
+#set( $companyId = $ctx.args.data.companyId )
+#set( $vehicleNumber = $ctx.args.data.vehicleNumber )
+#set( $routeId = $ctx.args.data.routeId )
+#set( $startTime = $ctx.args.data.startTime )
 {
     "version" : "2017-02-28",
     "operation" : "DeleteItem",
     "key" : {
-        "pk" : $util.dynamodb.toDynamoDBJson("vehicle#${ctx.args.plate}"),
-        "sk" : $util.dynamodb.toDynamoDBJson("vehicle#metadata")
+        "pk" : $util.dynamodb.toDynamoDBJson("vehicle#${companyId}#${vehicleNumber}"),
+        "sk" : $util.dynamodb.toDynamoDBJson("trip#${routeId}#${startTime}")
     }
 }

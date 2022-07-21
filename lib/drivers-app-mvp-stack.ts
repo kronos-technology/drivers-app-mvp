@@ -8,10 +8,7 @@ import {
 import { Construct } from 'constructs';
 import { aws_cognito as cognito, aws_dynamodb as dynamodb } from 'aws-cdk-lib';
 import * as appsync from '@aws-cdk/aws-appsync-alpha';
-import {
-  ResolverType,
-  resolvers as ApiResolvers
-} from './api-resolvers/resolver-module';
+import { ResolverType, resolvers as ApiResolvers } from './api-resolvers/main';
 import { getMappingTemplatePath } from './utils/utils';
 
 // lib/cdk-products-stack.ts

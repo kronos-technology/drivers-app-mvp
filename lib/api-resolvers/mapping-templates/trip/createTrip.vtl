@@ -1,13 +1,19 @@
+#set( $companyId = $ctx.args.data.companyId )
+#set( $vehicleNumber = $ctx.args.data.vehicleNumber )
+#set( $routeId = $ctx.args.data.routeId )
+#set( $startTime = $ctx.args.data.startTime )
+#set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
 #set( $primaryKey = {
-    "pk": "vehicle#${ctx.args.data.plate}",
-    "sk": "vehicle#metadata"
+    "pk": "vehicle#${companyId}#${vehicleNumber}",
+    "sk": "trip#${routeId}#${startTime}"
     }
 )
 #set( $dbItem = $util.map.copyAndRemoveAllKeys($ctx.args.data, []) )
-#set( $currentTime = $util.time.nowFormatted("yyyy-MM-dd HH:mm:ssZ")  )
 $util.qr( $dbItem.put("id", $util.autoId() ))
-$util.qr( $dbItem.put("gs1pk", "vehicle#") )
-$util.qr( $dbItem.put("gs1sk", "${ctx.args.data.companyId}") )
+$util.qr( $dbItem.put("gs1pk", "trip#") )
+$util.qr( $dbItem.put("gs1sk", "route#${routeId}#${startTime}") )
+$util.qr( $dbItem.put("gs2pk", "trip#") )
+$util.qr( $dbItem.put("gs2sk", "company#${companyId}#${startTime}") )
 $util.qr( $dbItem.put("created", ${currentTime}) )
 $util.qr( $dbItem.put("updated", ${currentTime}) )
 {

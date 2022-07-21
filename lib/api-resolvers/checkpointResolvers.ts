@@ -1,6 +1,6 @@
 import { MappingTemplate } from '@aws-cdk/aws-appsync-alpha';
 import { getMappingTemplatePath } from '../utils/utils';
-import { ResolverType } from './resolver-module';
+import { ResolverType } from './main';
 
 const checkpointResolvers: Array<ResolverType> = [
   {

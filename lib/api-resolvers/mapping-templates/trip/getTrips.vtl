@@ -1,18 +1,39 @@
-#set( $expression = "gs1pk = :gs1pk")
+#set( $routeId = $ctx.args.routeId )
+#set( $companyId = $ctx.args.companyId )
+#if( $routeId && $companyId )
+	$util.error("You can only  filter by route OR company. Not both")
+#elseif( $routeId )
+    #set( $gsi = "gs1" )
+	#set( $gsipk = "gs1pk" )
+	#set( $gsisk = "gs1sk" )
+	#set( $expression = "gs1pk = :gs1pk" )
+	#set( $filter = "route#${routeId} )
+#elseif( $companyId )
+    #set( $gsi = "gs2")
+	#set( $gsipk = "gs2pk" )
+	#set( $gsisk = "gs2sk" )
+    #set( $expression = "gs2pk = :gs2pk" )
+	#set( $filter = "company#${companyId}" )
+#else
+    #set( $gsi = "gs1")
+	#set( $gsipk = "gs1pk" )
+	#set( $expression = "gs1pk = :gs1pk" )
+#end
 {
 	"version" : "2017-02-28",
 	"operation" : "Query",
 	"query" : {
 		"expressionValues" : {
-			":gs1pk": $util.dynamodb.toDynamoDBJson("vehicle#")
-		#if( ${ctx.args.companyId} )
-			#set( $expression = "${expression} and begins_with(gs1sk, :gs1sk)")
-			,":gs1sk": $util.dynamodb.toDynamoDBJson(${ctx.args.companyId})
+			":${gsipk}": $util.dynamodb.toDynamoDBJson("trip#")
+		#if( ${ctx.args.routeId} || ${ctx.args.companyId} )
+			#set( $expression = "${expression} and begins_with(${gsisk}, :${gsisk})")
+			,":${gsisk}": $util.toDynamoDBJson(${filter})
 		#end
 		},
 		"expression" : "${expression}"
 	},
-	"consistentRead" : false,
+	"consistentRead" : true,
+    "scanIndexForward" : false,
 	"limit": $util.defaultIfNull( ${ctx.args.limit}, 20 ),
-	"index": "gs1"
+	"index": $gsi
 }

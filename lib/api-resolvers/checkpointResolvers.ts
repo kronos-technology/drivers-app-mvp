@@ -53,9 +53,9 @@ const checkpointResolvers: Array<ResolverType> = [
   },
   {
     typeName: 'Mutation',
-    fieldName: 'removeRouteInCheckpoint',
+    fieldName: 'deleteRouteInCheckpoint',
     requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('checkpoint', 'removeRouteInCheckpoint.vtl')
+      getMappingTemplatePath('checkpoint', 'deleteRouteInCheckpoint.vtl')
     ),
     responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
   }

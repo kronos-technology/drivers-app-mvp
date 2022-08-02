@@ -97,65 +97,58 @@ export class DriversAppMvpStack extends Stack {
 
     // AppSync Data Source -> DynamoDB table
     const DDBDataSource = api.addDynamoDbDataSource('DDBDataSource', dbTable);
-    const getLatestCheckinFunction = new appsync.AppsyncFunction(
+
+    const getLastTicketFn = new appsync.AppsyncFunction(
       this,
-      'getLatestCheckinFn',
+      'getLastTicketFn',
       {
-        name: 'getLatestCheckinFunction',
+        name: 'getLastTicketFn',
         api,
         dataSource: DDBDataSource,
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'q-get-latest-checkin-req.vtl')
+          getMappingTemplatePath('ticket', 'getLastTicket.vtl')
         ),
         responseMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'q-get-latest-checkin-res.vtl')
+          getMappingTemplatePath('ticket', 'calculateDifference.vtl')
         )
       }
     );
 
-    const updateLastCheckinFunction = new appsync.AppsyncFunction(
+    const updateLastTicketFn = new appsync.AppsyncFunction(
       this,
-      'updateLastCheckinFn',
+      'updateLastTicketFn',
       {
-        name: 'updateLastCheckinFunction',
+        name: 'updateLastTicketFn',
         api,
         dataSource: DDBDataSource,
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'm-update-last-checkin-req.vtl')
+          getMappingTemplatePath('ticket', 'updateLastTicket.vtl')
         ),
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );
 
-    const createCheckinFunction = new appsync.AppsyncFunction(
-      this,
-      'createCheckinFn',
-      {
-        name: 'createCheckinFunction',
-        api,
-        dataSource: DDBDataSource,
-        requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'm-create-checkin-req.vtl')
-        ),
-        responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
-      }
-    );
+    const storeTicketFn = new appsync.AppsyncFunction(this, 'storeTicketFn', {
+      name: 'storeTicketFn',
+      api,
+      dataSource: DDBDataSource,
+      requestMappingTemplate: appsync.MappingTemplate.fromFile(
+        getMappingTemplatePath('ticket', 'storeTicket.vtl')
+      ),
+      responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
+    });
 
-    const checkinResolver = new appsync.Resolver(
+    const generateTicketResolver = new appsync.Resolver(
       this,
-      'createCheckinPipeline',
+      'generateTicketResolver',
       {
         api,
         typeName: 'Mutation',
-        fieldName: 'createCheckin',
+        fieldName: 'generateTicket',
         requestMappingTemplate: appsync.MappingTemplate.fromFile(
-          getMappingTemplatePath('checkin', 'p-create-checkin-before.vtl')
+          getMappingTemplatePath('ticket', 'prepareTicket.vtl')
         ),
-        pipelineConfig: [
-          getLatestCheckinFunction,
-          updateLastCheckinFunction,
-          createCheckinFunction
-        ],
+        pipelineConfig: [getLastTicketFn, updateLastTicketFn, storeTicketFn],
         responseMappingTemplate: appsync.MappingTemplate.dynamoDbResultItem()
       }
     );

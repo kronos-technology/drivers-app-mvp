@@ -21,14 +21,6 @@ const ticketResolvers: Array<ResolverType> = [
   },
   {
     typeName: 'Mutation',
-    fieldName: 'createTicket',
-    requestMappingTemplate: MappingTemplate.fromFile(
-      getMappingTemplatePath('ticket', 'createTicket.vtl')
-    ),
-    responseMappingTemplate: MappingTemplate.dynamoDbResultItem()
-  },
-  {
-    typeName: 'Mutation',
     fieldName: 'updateTicket',
     requestMappingTemplate: MappingTemplate.fromFile(
       getMappingTemplatePath('ticket', 'updateTicket.vtl')

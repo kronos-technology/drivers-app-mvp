@@ -1,0 +1,16 @@
+#set( $expression = "gs1pk = :gs1pk and begins_with(gs1sk, :gs1sk)")
+#set( $checkpointId = "checkpoint#${ctx.args.data.checkpointId}")
+{
+	"version" : "2017-02-28",
+	"operation" : "Query",
+	"query" : {
+		"expression" : "${expression}",
+		"expressionValues" : {
+			":gs1pk": $util.dynamodb.toDynamoDBJson($checkpointId),
+			":gs1sk": $util.dynamodb.toDynamoDBJson("ticket#")
+		}
+	},
+	"consistentRead" : false,
+	"limit": $util.defaultIfNull( ${ctx.args.limit}, 30 ),
+	"index": "gs1"
+}

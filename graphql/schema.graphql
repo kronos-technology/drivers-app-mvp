@@ -71,7 +71,7 @@ type Company @aws_api_key @aws_cognito_user_pools {
   vehicles: [Vehicle]
 }
 
-input CompanyInfo{
+input CompanyInfo {
   address: String
   alias: String!
   city: String!
@@ -81,9 +81,6 @@ input CompanyInfo{
   name: String!
   nit: String
   phone: AWSPhone
-  routes: [Route]
-  drivers: [Driver]
-  vehicles: [Vehicle]
 }
 
 input CompanyUpdate {
@@ -95,9 +92,6 @@ input CompanyUpdate {
   name: String
   nit: String
   phone: AWSPhone
-  routes: [Route]
-  drivers: [Driver]
-  vehicles: [Vehicle]
 }
 
 type Route @aws_api_key @aws_cognito_user_pools {
@@ -116,8 +110,6 @@ input RouteInfo {
   id: String
   origin: String
   routeId: String!
-  companies: [RouteInCompany]
-  checkpoints: [Checkpoint]
 }
 
 input RouteUpdate {
@@ -126,8 +118,6 @@ input RouteUpdate {
   id: String
   origin: String
   routeId: String!
-  companies: [RouteInCompany]
-  checkpoints: [Checkpoint]
 }
 
 type Checkpoint @aws_api_key @aws_cognito_user_pools {
@@ -148,8 +138,6 @@ input CheckpointInfo {
   id: String!
   latitude: Float!
   longitude: Float!
-  tickets: [Ticket]
-  routes: [Route]
 }
 
 input CheckpointUpdate {
@@ -159,8 +147,6 @@ input CheckpointUpdate {
   id: String
   latitude: Float
   longitude: Float
-  tickets: [Ticket]
-  routes: [Route]
 }
 
 type RouteInCompany @aws_api_key @aws_cognito_user_pools {
@@ -195,7 +181,6 @@ input TicketInfo {
   timestamp: AWSDateTime!
   vehicleId: String!
   vehicleNumber: String!
-
 }
 
 input TicketUpdate {
@@ -240,7 +225,6 @@ input TripInfo @aws_api_key @aws_cognito_user_pools {
   routeId: String!
   startTime: AWSDateTime!
   status: String!
-  tickets: [Ticket]
   vehicleId: String!
 }
 
@@ -253,94 +237,148 @@ input TripUpdate @aws_api_key @aws_cognito_user_pools {
   routeId: String!
   startTime: AWSDateTime!
   status: String
-  tickets: [Ticket]
   vehicleId: String!
 }
 
 type Query {
   # Driver
   getDriver(driverId: String!): Driver @aws_api_key @aws_cognito_user_pools
-  getDrivers(companyId: String, limit: Int): [Driver] @aws_api_key @aws_cognito_user_pools
+  getDrivers(companyId: String, limit: Int): [Driver]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Vehicle
   getVehicle(plate: String!): Vehicle @aws_api_key @aws_cognito_user_pools
-  getVehicles(companyId: String, limit: Int): [Vehicle] @aws_api_key @aws_cognito_user_pools
+  getVehicles(companyId: String, limit: Int): [Vehicle]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Company
   getCompany(companyId: String!): Company @aws_api_key @aws_cognito_user_pools
-  getCompanies(city: String, limit: Int): [Company] @aws_api_key @aws_cognito_user_pools
+  getCompanies(city: String, limit: Int): [Company]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Route
   getRoute(routeId: String!): Route @aws_api_key @aws_cognito_user_pools
-  getRoutes(origin: String, destination: String, limit: Int): [Route] @aws_api_key @aws_cognito_user_pools
+  getRoutes(origin: String, destination: String, limit: Int): [Route]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Checkpoint
-  getCheckpoint(checkpointId: ID!): Checkpoint @aws_api_key @aws_cognito_user_pools
-  getCheckpoints(route: String, limit: Int): [Checkpoint] @aws_api_key @aws_cognito_user_pools
+  getCheckpoint(checkpointId: ID!): Checkpoint
+    @aws_api_key
+    @aws_cognito_user_pools
+  getCheckpoints(route: String, limit: Int): [Checkpoint]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Ticket
-  getTicket(checkpointId: String!, routeId: String!, timestamp: String!): Ticket @aws_api_key @aws_cognito_user_pools
-  getTickets(vehicleId: String, routeId: String): [Ticket] @aws_api_key @aws_cognito_user_pools
+  getTicket(
+    checkpointId: String!
+    routeId: String!
+    timestamp: String!
+  ): Ticket @aws_api_key @aws_cognito_user_pools
+  getTickets(vehicleId: String, routeId: String): [Ticket]
+    @aws_api_key
+    @aws_cognito_user_pools
   # Trip
-  getTrip(routeId: String!, companyId: String!, start: String!): Trip @aws_api_key @aws_cognito_user_pools
-  getTrips(vehicleId: String, companyId: String): [Trip] @aws_api_key @aws_cognito_user_pools
+  getTrip(routeId: String!, companyId: String!, start: String!): Trip
+    @aws_api_key
+    @aws_cognito_user_pools
+  getTrips(vehicleId: String, companyId: String): [Trip]
+    @aws_api_key
+    @aws_cognito_user_pools
 }
 
 type Mutation {
   # Driver
   createDriver(data: DriverInfo!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteDriver(driverId: String!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateDriver(data: DriverUpdate!): Driver
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   # Vehicle
   createVehicle(data: VehicleInfo!): Vehicle
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteVehicle(plate: String!): Vehicle
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateVehicle(data: VehicleUpdate!): Vehicle
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   # Company
   createCompany(data: CompanyInfo!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteCompany(companyId: String!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateCompany(data: CompanyUpdate!): Company
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   addRouteInCompany(companyId: String!, routeId: String!): RouteInCompany
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  removeRouteInCompany(companyId: String!, routeId: String!): RouteInCompany
-  # Route
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
+  deleteRouteInCompany(companyId: String!, routeId: String!): RouteInCompany
+    # Route
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   createRoute(data: RouteInfo!): Route
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteRoute(routeId: String!): Route
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateRoute(data: RouteUpdate!): Route
-  # Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    # Checkpoint
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   createCheckpoint(data: CheckpointInfo!): Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteCheckpoint(checkpointId: String!): Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateCheckpoint(data: CheckpointUpdate!): Checkpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  addRouteInCheckpoint(checkpointId: String!, routeId: String!): RouteInCheckpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  removeRouteInCheckpoint(checkpointId: String!, routeId: String!): RouteInCheckpoint
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
+  addRouteInCheckpoint(
+    checkpointId: String!
+    routeId: String!
+  ): RouteInCheckpoint
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
+  deleteRouteInCheckpoint(
+    checkpointId: String!
+    routeId: String!
+  ): RouteInCheckpoint
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   # Ticket
-  createTicket(data: TicketInfo!): Ticket
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+  generateTicket(data: TicketInfo!): Ticket
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateTicket(data: TicketUpdate!): Ticket
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
-  deleteTicket(checkpointId: String!, routeId: String!, timestamp: String!): Ticket
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
+  deleteTicket(
+    checkpointId: String!
+    routeId: String!
+    timestamp: String!
+  ): Ticket @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
   # Trip
   createTrip(data: TripInfo!): Trip
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   deleteTrip(routeId: String!, companyId: String!, start: String!): Trip
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
   updateTrip(data: TripUpdate!): Trip
-    @aws_cognito_user_pools(cognito_groups: ["Admin"]) @aws_api_key
+    @aws_cognito_user_pools(cognito_groups: ["Admin"])
+    @aws_api_key
 }
 
 type Subscription {
-  onCreateTicket: Ticket @aws_subscribe(mutations: ["createTicket"])
+  onGenerateTicket: Ticket @aws_subscribe(mutations: ["generateTicket"])
 }

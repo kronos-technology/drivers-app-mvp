@@ -21,7 +21,7 @@ const tripResolvers: Array<ResolverType> = [
   },
   {
     typeName: 'Mutation',
-    fieldName: 'createTrips',
+    fieldName: 'createTrip',
     requestMappingTemplate: MappingTemplate.fromFile(
       getMappingTemplatePath('trip', 'createTrip.vtl')
     ),
